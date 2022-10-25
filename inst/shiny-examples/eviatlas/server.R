@@ -28,7 +28,7 @@ if(webshot::is_phantomjs_installed()==FALSE){
 
 
 # load data + text
-load("www/pilotdata.rdata")
+#load("www/pilotdata.rdata")
 start_text <- read_file("www/AboutEvi.html")
 about_sysmap_text <- read_file("www/AboutSysMap.html")
 how_cite_text <- read_file("www/HowCiteEvi.html")
@@ -120,7 +120,8 @@ shinyServer(
     # if user switches to internal data, clear in-app data
     observeEvent(input$sample_or_real, {
       if(input$sample_or_real == "sample"){
-        data_internal$raw <- eviatlas_pilotdata
+        data_internal$raw <- eviatlas::metadata
+        #data_internal$raw <- eviatlas::eviatlas_pilotdata
         #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
       } else {
         data_internal$raw <- NULL
@@ -319,23 +320,18 @@ shinyServer(
     output$filtered_table <- DT::renderDataTable(
       DT::datatable(data_active(),
                     extensions = 'Buttons',
-                    filter = c('top'),
-                    # caption = "Use the boxes below column headers to filter data",
+                    filter = 'top', 
+                    #caption = "Use the boxes below column headers to filter data",
                     #class = c('display', 'compact'),
                     style='bootstrap',
                     options = list(scrollX = TRUE,
                                    scrollY = TRUE,
+                                   pageLength = 1, 
+                                   autoWidth = FALSE,
                                    responsive=T,
                                    dom='Blfrtip',
-                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-                                   columnDefs = list(list(
-                                     targets = c(1:min(25, ncol(data_internal$raw))), # will apply render function to lesser of first 25 columns or number of columns in displayed data
-                                     render = JS( # limits character strings longer than 50 characters to their first 30 chars, and has whole string appear as a tooltip
-                                       "function(data, type, row, meta) {",
-                                       "return type === 'display' && data.length > 50 ?",
-                                       "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
-                                       "}")
-                                   ))),
+                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+                                   ), #,
                     class="display"
       ),
       server = F)
@@ -371,7 +367,7 @@ shinyServer(
       req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
 
       div(
-        title = "If your dataset has a link to each study, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
+        title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
         selectInput(
           inputId = "map_link_select",
           label = "Select Link Column (in pop-up)",
@@ -664,7 +660,7 @@ shinyServer(
       if (input$map_link_select != "") {
         links_input <- sapply(data_active()[input$map_link_select], as.character)
         links = paste0("<strong><a target='_blank' rel='noopener noreferrer' href='",
-                       links_input, "'>Link to paper</a></strong>")
+                       links_input, "'>Link to data</a></strong>")
       } else {links <- ""}
       links
     })

@@ -28,9 +28,9 @@ easyprint_js_file <- "https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/di
 
 sidebar <- dashboardSidebar(
 
-  # sidebarUserPanel("EviAtlas Nav"),
+  # sidebarUserPanel("FDP Data Atlas Nav"),
   sidebarMenu(id = "main_sidebar",
-              menuItem("About EviAtlas", tabName = "about",
+              menuItem("About FDP Data Atlas", tabName = "about",
                        icon = icon("question")),
               menuItem("Evidence Atlas", tabName = "home",
                        icon = icon("map")),
@@ -43,7 +43,7 @@ sidebar <- dashboardSidebar(
               menuItem("Resources", tabName = "resources",
                        icon = icon("list")),
               menuItem("View Code",
-                       href = "https://github.com/ESHackathon/eviatlas",
+                       href = "https://github.com/takaakimasaki/eviatlas",
                        icon = icon("github"))
   )
 )
@@ -52,7 +52,7 @@ sidebar <- dashboardSidebar(
 home <- tags$html(
   tags$head(
     includeHTML("www/google-analytics.html"),
-    tags$title('EviAtlas'),
+    tags$title('FDP Data Atlas'),
     tags$script(src=easyprint_js_file)
   ),
   tags$style(type="text/css",
@@ -86,10 +86,10 @@ body <- dashboardBody(
             fluidRow(
               mainPanel(wellPanel(
                 tabsetPanel(
-                  tabPanel(title = 'About EviAtlas', htmlOutput("start_text")),
+                  tabPanel(title = 'About FDP Data Atlas', htmlOutput("start_text")),
                   tabPanel(title = 'About Systematic Maps', htmlOutput("about_sysmap_text")),
-                  tabPanel(title = 'How to Use EviAtlas', htmlOutput("how_works_text")),
-                  tabPanel(title = 'How to Cite EviAtlas', htmlOutput("how_cite_text"))
+                  tabPanel(title = 'How to Use FDP Data Atlas', htmlOutput("how_works_text")),
+                  tabPanel(title = 'How to Cite FDP Data Atlas', htmlOutput("how_cite_text"))
                 )),
                 wellPanel(tabsetPanel(
                   tabPanel(title = 'Data Attributes', htmlOutput("uploaded_attributes"),
@@ -111,7 +111,7 @@ body <- dashboardBody(
                       selected = "sample"
                     ),
                     bsTooltip("sample_or_real",
-                              title = "Select whether you want to try EviAtlas using the sample data from a recent systematic map, or whether you wish to upload your own data in the correct format",
+                              title = "Select whether you want to try FDP Data Atlas using the sample data from a recent systematic map, or whether you wish to upload your own data in the correct format",
                               placement = "left",
                               trigger = "hover"
                     ),
@@ -292,17 +292,17 @@ body <- dashboardBody(
                                   br(),
                                   tags$iframe(src="https://www.youtube.com/embed/Igsxx_5RBB4", style="display:block; width:80%; height:80vh;", frameborder="0", allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture")),
                          tabPanel(title = 'Case studies',
-                                  h2('Case studies of EviAtlas visualisations'),
+                                  h2('Case studies of FDP Data Atlas visualisations'),
                                   br(),
                                   h4('1. Review of the evidence for oceans and human health relationships in Europe: a systematic map'),
                                   'In their systematic map of evidence on the impacts of oceans on human health, ', tags$a(href="https://www.sciencedirect.com/science/article/pii/S0160412020322303#f0015", "Short et al."), ' produced an interactive map of the evidence. You can see their interactive map by following ', tags$a(href="https://sophieatlas2020.github.io/", "this link"), ' and looking at their map below:',
                                   br(),
                                   br(),
                                   tags$iframe(src="https://sophieatlas2020.github.io/map3.html", style="width:80%; height:80vh;", frameborder="0")),
-                         tabPanel(title = 'Reviews using EviAtlas',
-                                  h2('Reviews using EviAtlas'),
+                         tabPanel(title = 'Reviews using FDP Data Atlas',
+                                  h2('Reviews using FDP Data Atlas'),
                                   br(),
-                                  'The following collection of reviews made use of EviAtlas to present their findings:',
+                                  'The following collection of reviews made use of FDP Data Atlas to present their findings:',
                                   br(),
                                   br(),
                                   tags$a(href="https://environmentalevidencejournal.biomedcentral.com/articles/10.1186/s13750-019-0183-1", tags$li('Macura, B., Piniewski, M., Księżniak, M., Osuch, P., Haddaway, N. R., Ek, F., ... & Tattari, S. (2019). Effectiveness of ecotechnologies in agriculture for the recovery and reuse of carbon and nutrients in the Baltic and boreo-temperate regions: a systematic map. Environmental Evidence, 8(1), 1-18.')),
@@ -325,7 +325,7 @@ body <- dashboardBody(
 
 shinyUI(
   dashboardPage(
-    dashboardHeader(title = "EviAtlas"),
+    dashboardHeader(title = "FDP Data Atlas"),
     sidebar,
     body
   ))
