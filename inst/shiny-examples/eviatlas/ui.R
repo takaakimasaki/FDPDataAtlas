@@ -178,30 +178,37 @@ body <- dashboardBody(
             fluidRow(
               tabsetPanel(
                 tabPanel("Configure Map",
-                         wellPanel(fluidRow(
-
-                           column(4,
+                         wellPanel(
+                           column(8,
+                                  fluidRow(
+                                  # choose variable from column names
+                             selectInput(
+                               inputId = "selected_variable",
+                               label = "Select variable",
+                               choices = unique(eviatlas::ref_data$indicator)
+                           ),
+                           column(5,
                                   uiOutput("atlas_popups"),
                                   uiOutput("atlas_link_popup")
                            ),
-                           column(2,
+                           column(5,
                                   #uiOutput("atlas_filter"),
                                   uiOutput("atlas_color_by"),
                                   uiOutput("atlas_selectmap")
                            ),
-                           column(2,
+                           column(5,
                                   uiOutput("cluster_columns"),
                                   conditionalPanel(condition = "input.map_cluster_select",
                                                    uiOutput("cluster_size"))
                            ),
-                           column(2,
+                           column(5,
                                   textInput("map_title_select", "Atlas Title"),
                                   conditionalPanel(condition = "input.sample_or_real != 'shapefile'", #doesn't work for shapefiles currently
                                                    sliderInput("atlas_radius_select", "Point size",
                                                                min = 1, max = 8, value = 3,
                                                                ticks = F)))
                          ))
-                ),
+                )),
                 # tabPanel('Advanced Options',
                 #          column(2,
                 #                 textInput('atlas_opacity_select', 'Placeholder for Opacity'))),

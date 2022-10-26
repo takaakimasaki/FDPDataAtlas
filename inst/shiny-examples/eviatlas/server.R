@@ -120,7 +120,7 @@ shinyServer(
     # if user switches to internal data, clear in-app data
     observeEvent(input$sample_or_real, {
       if(input$sample_or_real == "sample"){
-        data_internal$raw <- eviatlas::metadata
+        data_internal$raw <- eviatlas::metadata %>% as.data.frame()
         #data_internal$raw <- eviatlas::eviatlas_pilotdata
         #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
       } else {
@@ -398,8 +398,7 @@ shinyServer(
       # req(data_internal$raw)
 
       div(
-        title = "Multiple columns are allowed as popups",
-        selectizeInput(
+       selectizeInput(
           inputId = "map_popup_select",
           label = "Select Popup Info",
           selected = colnames(data_active())[1],
@@ -418,7 +417,7 @@ shinyServer(
         shinyWidgets::materialSwitch(
           inputId = "map_cluster_select",
           label = "Cluster Map Points?",
-          value = FALSE,
+          value = TRUE,
           status = "primary"
         )
       )
@@ -442,13 +441,13 @@ shinyServer(
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
       req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
-
+      colnames <- eviatlas::metadata %>% dplyr::select(!where(is.numeric)) %>% colnames()
       div(
         title="Select variable to color points by",
         selectInput(
           inputId = "atlas_color_by_select",
           label = "Color points by:",
-          choices = c("", colnames(data_active())),
+          choices = c("", colnames),
           selected = ""
         )
       )
@@ -688,7 +687,7 @@ shinyServer(
 
       # replace missing lat/long with standard locations chosen by 'nonplotted' input
       #if(input$nonplotted == 'Not plotted'){
-       lat_plotted[is.na(lat_plotted)] <- 0
+      lat_plotted[is.na(lat_plotted)] <- 0
       lng_plotted[is.na(lng_plotted)] <- -20
 
       if (input$atlas_color_by_select != "") {
@@ -696,9 +695,10 @@ shinyServer(
         factpal <- colorFactor(RColorBrewer::brewer.pal(9, 'Set1'),
                                data_active()$color_user, reverse = TRUE)
         colorby <- ~factpal(data_active()[[color_user]])
-
+        
         if (length(unique(data_active()[, color_user])) < 9) {
           leafletProxy("map", data = data_active()) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
@@ -719,6 +719,19 @@ shinyServer(
         colorby <- "blue"
       }
 
+      #Refugee statistics
+      ref_data_filtered <- reactive({
+        eviatlas::ref_data %>%
+          filter(indicator==input$selected_variable)
+      })
+      
+      breaks <- quantile(ref_data_filtered()$value, probs = seq(0, 1, 0.25), na.rm=TRUE)
+      breaks <- rev(breaks)
+      pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
+      
+      labels <- sprintf("%s: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$value) %>%
+        lapply(htmltools::HTML)
+      
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
         leaflet::clearMarkerClusters() %>%
@@ -730,9 +743,23 @@ shinyServer(
                                   color = colorby,
                                   stroke = FALSE, fillOpacity = 0.7,
                                   label = ~lapply(popup_string(), shiny::HTML),
-                                  clusterOptions = eval(cluster_options())
-        )
-
+                                  clusterOptions = eval(cluster_options())) %>%
+                                    addPolygons(
+                                      data = eviatlas::bounds,
+                                      fillColor = ~ pal(ref_data_filtered()$value),
+                                      color = "white", # set the border color (e.g., black, blue, etc)
+                                      dashArray = "3", # set the dash of the border (e.g., 1,2,3, etc)
+                                      weight = 1, # set the thickness of the border (e.g., 1,2,3, etc)
+                                      fillOpacity = 0.7, # set the transparency of the border (range: 0-1)
+                                      label = labels) %>%
+                                    leaflet::addLegend(
+                                      pal = pal,
+                                      values = ~ref_data_filtered()$value,
+                                      opacity = 0.7, # set the transparency of the legend (range: 0-1)
+                                      title = input$selected_variable,
+                                      layerId = "ref_data")
+                                    
+       
     })
 
     observeEvent(input$map_title_select, {
@@ -844,6 +871,7 @@ shinyServer(
                                       label = ~popup_string() %>% lapply(shiny::HTML),
                                       clusterOptions = eval(cluster_options())
             ) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
@@ -900,6 +928,7 @@ shinyServer(
                                       label = ~popup_string() %>% lapply(shiny::HTML),
                                       clusterOptions = eval(cluster_options())
             ) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
