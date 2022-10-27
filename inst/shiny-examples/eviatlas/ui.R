@@ -1,21 +1,5 @@
-library(dplyr)
-library(stringr)
-library(ggplot2)
-library(tidyr)
-library(DT)
-library(leaflet)
-library(leaflet.providers)
-library(htmltools)
-library(htmlwidgets)
-library(mapview)
-library(leafem)
-library(sf)
-library(viridis)
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(shinyBS)
-library(RColorBrewer)
+pacman::p_load(dplyr, stringr, ggplot2, tidyr, DT, leaflet, leaflet.providers, htmltools, htmlwidgets, mapview,leafem,sf,viridis,shiny,shinydashboard,shinyWidgets,shinyBS,RColorBrewer)
+
 
 if(webshot::is_phantomjs_installed()==FALSE){
   webshot::install_phantomjs()
