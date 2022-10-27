@@ -371,8 +371,8 @@ shinyServer(
         selectInput(
           inputId = "map_link_select",
           label = "Select Link Column (in pop-up)",
-          choices = c("", get_link_cols(data_internal$raw)),
-          selected = ""
+          choices = c("", "data_url"),
+          selected = "data_url"
         )
       )
 
@@ -401,7 +401,7 @@ shinyServer(
        selectizeInput(
           inputId = "map_popup_select",
           label = "Select Popup Info",
-          selected = colnames(data_active())[1],
+          selected = colnames(data_active())[4],
           choices = colnames(data_active()),
           multiple = T
         )
