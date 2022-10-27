@@ -28,7 +28,7 @@ if(webshot::is_phantomjs_installed()==FALSE){
 
 
 # load data + text
-load("www/pilotdata.rdata")
+#load("www/pilotdata.rdata")
 start_text <- read_file("www/AboutEvi.html")
 about_sysmap_text <- read_file("www/AboutSysMap.html")
 how_cite_text <- read_file("www/HowCiteEvi.html")
@@ -120,7 +120,8 @@ shinyServer(
     # if user switches to internal data, clear in-app data
     observeEvent(input$sample_or_real, {
       if(input$sample_or_real == "sample"){
-        data_internal$raw <- eviatlas_pilotdata
+        data_internal$raw <- eviatlas::metadata %>% as.data.frame()
+        #data_internal$raw <- eviatlas::eviatlas_pilotdata
         #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
       } else {
         data_internal$raw <- NULL
@@ -319,23 +320,18 @@ shinyServer(
     output$filtered_table <- DT::renderDataTable(
       DT::datatable(data_active(),
                     extensions = 'Buttons',
-                    filter = c('top'),
-                    # caption = "Use the boxes below column headers to filter data",
+                    filter = 'top', 
+                    #caption = "Use the boxes below column headers to filter data",
                     #class = c('display', 'compact'),
                     style='bootstrap',
                     options = list(scrollX = TRUE,
                                    scrollY = TRUE,
+                                   pageLength = 1, 
+                                   autoWidth = FALSE,
                                    responsive=T,
                                    dom='Blfrtip',
-                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-                                   columnDefs = list(list(
-                                     targets = c(1:min(25, ncol(data_internal$raw))), # will apply render function to lesser of first 25 columns or number of columns in displayed data
-                                     render = JS( # limits character strings longer than 50 characters to their first 30 chars, and has whole string appear as a tooltip
-                                       "function(data, type, row, meta) {",
-                                       "return type === 'display' && data.length > 50 ?",
-                                       "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
-                                       "}")
-                                   ))),
+                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+                                   ), #,
                     class="display"
       ),
       server = F)
@@ -371,12 +367,12 @@ shinyServer(
       req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
 
       div(
-        title = "If your dataset has a link to each study, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
+        title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
         selectInput(
           inputId = "map_link_select",
           label = "Select Link Column (in pop-up)",
-          choices = c("", get_link_cols(data_internal$raw)),
-          selected = ""
+          choices = c("", "data_url"),
+          selected = "data_url"
         )
       )
 
@@ -402,11 +398,10 @@ shinyServer(
       # req(data_internal$raw)
 
       div(
-        title = "Multiple columns are allowed as popups",
-        selectizeInput(
+       selectizeInput(
           inputId = "map_popup_select",
           label = "Select Popup Info",
-          selected = colnames(data_active())[1],
+          selected = colnames(data_active())[4],
           choices = colnames(data_active()),
           multiple = T
         )
@@ -422,7 +417,7 @@ shinyServer(
         shinyWidgets::materialSwitch(
           inputId = "map_cluster_select",
           label = "Cluster Map Points?",
-          value = FALSE,
+          value = TRUE,
           status = "primary"
         )
       )
@@ -446,13 +441,13 @@ shinyServer(
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
       req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
-
+      colnames <- eviatlas::metadata %>% dplyr::select(!where(is.numeric)) %>% colnames()
       div(
         title="Select variable to color points by",
         selectInput(
           inputId = "atlas_color_by_select",
           label = "Color points by:",
-          choices = c("", colnames(data_active())),
+          choices = c("", colnames),
           selected = ""
         )
       )
@@ -664,7 +659,7 @@ shinyServer(
       if (input$map_link_select != "") {
         links_input <- sapply(data_active()[input$map_link_select], as.character)
         links = paste0("<strong><a target='_blank' rel='noopener noreferrer' href='",
-                       links_input, "'>Link to paper</a></strong>")
+                       links_input, "'>Link to data</a></strong>")
       } else {links <- ""}
       links
     })
@@ -692,7 +687,7 @@ shinyServer(
 
       # replace missing lat/long with standard locations chosen by 'nonplotted' input
       #if(input$nonplotted == 'Not plotted'){
-       lat_plotted[is.na(lat_plotted)] <- 0
+      lat_plotted[is.na(lat_plotted)] <- 0
       lng_plotted[is.na(lng_plotted)] <- -20
 
       if (input$atlas_color_by_select != "") {
@@ -700,9 +695,10 @@ shinyServer(
         factpal <- colorFactor(RColorBrewer::brewer.pal(9, 'Set1'),
                                data_active()$color_user, reverse = TRUE)
         colorby <- ~factpal(data_active()[[color_user]])
-
+        
         if (length(unique(data_active()[, color_user])) < 9) {
           leafletProxy("map", data = data_active()) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
@@ -723,6 +719,19 @@ shinyServer(
         colorby <- "blue"
       }
 
+      #Refugee statistics
+      ref_data_filtered <- reactive({
+        eviatlas::ref_data %>%
+          filter(indicator==input$selected_variable)
+      })
+      
+      breaks <- quantile(ref_data_filtered()$value, probs = seq(0, 1, 0.25), na.rm=TRUE)
+      breaks <- rev(breaks)
+      pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
+      
+      labels <- sprintf("%s: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$value) %>%
+        lapply(htmltools::HTML)
+      
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
         leaflet::clearMarkerClusters() %>%
@@ -734,9 +743,23 @@ shinyServer(
                                   color = colorby,
                                   stroke = FALSE, fillOpacity = 0.7,
                                   label = ~lapply(popup_string(), shiny::HTML),
-                                  clusterOptions = eval(cluster_options())
-        )
-
+                                  clusterOptions = eval(cluster_options())) %>%
+                                    addPolygons(
+                                      data = eviatlas::bounds,
+                                      fillColor = ~ pal(ref_data_filtered()$value),
+                                      color = "white", # set the border color (e.g., black, blue, etc)
+                                      dashArray = "3", # set the dash of the border (e.g., 1,2,3, etc)
+                                      weight = 1, # set the thickness of the border (e.g., 1,2,3, etc)
+                                      fillOpacity = 0.7, # set the transparency of the border (range: 0-1)
+                                      label = labels) %>%
+                                    leaflet::addLegend(
+                                      pal = pal,
+                                      values = ~ref_data_filtered()$value,
+                                      opacity = 0.7, # set the transparency of the legend (range: 0-1)
+                                      title = input$selected_variable,
+                                      layerId = "ref_data")
+                                    
+       
     })
 
     observeEvent(input$map_title_select, {
@@ -848,6 +871,7 @@ shinyServer(
                                       label = ~popup_string() %>% lapply(shiny::HTML),
                                       clusterOptions = eval(cluster_options())
             ) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
@@ -904,6 +928,7 @@ shinyServer(
                                       label = ~popup_string() %>% lapply(shiny::HTML),
                                       clusterOptions = eval(cluster_options())
             ) %>%
+            leaflet::removeControl("ref_data") %>%
             leaflet::addLegend(
               title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
               position = 'topright',
