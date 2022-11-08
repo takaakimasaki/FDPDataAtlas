@@ -320,13 +320,13 @@ shinyServer(
     output$filtered_table <- DT::renderDataTable(
       DT::datatable(data_active(),
                     extensions = 'Buttons',
-                    filter = 'top', 
+                    filter = 'top',
                     #caption = "Use the boxes below column headers to filter data",
                     #class = c('display', 'compact'),
                     style='bootstrap',
                     options = list(scrollX = TRUE,
                                    scrollY = TRUE,
-                                   pageLength = 1, 
+                                   pageLength = 1,
                                    autoWidth = FALSE,
                                    responsive=T,
                                    dom='Blfrtip',
@@ -433,7 +433,7 @@ shinyServer(
           label = "Cluster Sensitivity",
           value = 4,
           step = 1,
-          min = 4,
+          min = 6,
           max = 16)
       )
     })
@@ -695,7 +695,7 @@ shinyServer(
         factpal <- colorFactor(RColorBrewer::brewer.pal(9, 'Set1'),
                                data_active()$color_user, reverse = TRUE)
         colorby <- ~factpal(data_active()[[color_user]])
-        
+
         if (length(unique(data_active()[, color_user])) < 9) {
           leafletProxy("map", data = data_active()) %>%
             leaflet::removeControl("ref_data") %>%
@@ -724,14 +724,14 @@ shinyServer(
         eviatlas::ref_data %>%
           filter(indicator==input$selected_variable)
       })
-      
+
       breaks <- quantile(ref_data_filtered()$value, probs = seq(0, 1, 0.25), na.rm=TRUE)
       breaks <- rev(breaks)
       pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
-      
+
       labels <- sprintf("%s: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$value) %>%
         lapply(htmltools::HTML)
-      
+
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
         leaflet::clearMarkerClusters() %>%
@@ -758,8 +758,8 @@ shinyServer(
                                       opacity = 0.7, # set the transparency of the legend (range: 0-1)
                                       title = input$selected_variable,
                                       layerId = "ref_data")
-                                    
-       
+
+
     })
 
     observeEvent(input$map_title_select, {
