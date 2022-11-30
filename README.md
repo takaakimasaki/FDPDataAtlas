@@ -1,9 +1,3 @@
-# EviAtlas
+# EviAtlas for mapping data gaps in socioeconomic conditions of forcibly displaced population
 
-EviAtlas is a shiny app for visualising the datasets produced by systematic maps. You can access the app at: https://estech.shinyapps.io/eviatlas/
-
-EviAtlas was produced as part of the first Evidence Synthesis Hackathon, hosted by the Stockholm Environment Institute (SEI) and organized by researchers at SEI and the Australian National University. 
-
-A paper describing the collaborative process used to develop EviAtlas is published in the journal Environmental Evidence, and can be accessed here: 
-
-https://doi.org/10.1186/s13750-019-0167-1
+This package is a variant of the [original eviatlas package](https://github.com/ESHackathon/eviatlas) and created to visualize persisting data gaps in the socio-economic data of forcibly displaced people (FDPs). 
