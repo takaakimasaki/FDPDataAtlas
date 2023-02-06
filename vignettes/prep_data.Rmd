@@ -19,7 +19,16 @@ pacman::p_load(devtools,dplyr,tidyverse)
 
 ```{r}
 metadata <- read_csv(here::here("inst","extdata","metadata.csv")) %>% filter(!is.na(Longitude))
-bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds"))
-ref_data <- read_rds(here::here("inst","extdata","wb_bounds_stats.rds"))
+bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds")) 
+
+#get the centroid of those countries
+bounds$geom_valid <- st_is_valid(bounds)
+
+##show list of countries with invalid geometries
+bounds <- bounds %>% filter(geom_valid=="TRUE") 
+table(bounds$geom_valid)
+
+ref_data <- read_rds(here::here("inst","extdata","wb_bounds_stats.rds")) %>%
+  filter(!is.na(value))
 usethis::use_data(metadata, bounds, ref_data, overwrite=TRUE)
 ```
