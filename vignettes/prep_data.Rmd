@@ -1,5 +1,5 @@
 ---
-title: "How to use Evitlas"
+title: "How to use FDPDataAtlas"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{How_to_use_Evitlas}
@@ -14,14 +14,12 @@ knitr::opts_chunk$set(
 )
 conflictRules("tidyr", mask.ok = c("extract"))
 conflictRules("dplyr", mask.ok = c("filter", "lag", "select"))
-pacman::p_load(devtools,dplyr,tidyverse)
+pacman::p_load(devtools,dplyr,tidyverse,sf)
 ```
 
 ```{r}
 metadata <- read_csv(here::here("inst","extdata","metadata.csv")) %>% filter(!is.na(Longitude))
-bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds")) %>%
-  filter((SM.POP.REFG>100000 | idp_n>1000000) & income_group!="High income") %>%
-  dplyr::select(ISO_A3,NAME_EN)
+bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds")) 
 
 list_inc <- bounds %>% 
   st_drop_geometry() %>%

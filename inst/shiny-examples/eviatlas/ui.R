@@ -16,7 +16,7 @@ library(shinydashboard)
 library(shinyWidgets)
 library(shinyBS)
 library(RColorBrewer)
-library(eviatlas)
+library(FDPDataAtlas)
 
 if(webshot::is_phantomjs_installed()==FALSE){
   webshot::install_phantomjs()
