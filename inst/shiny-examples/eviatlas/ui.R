@@ -44,7 +44,7 @@ sidebar <- dashboardSidebar(
               menuItem("Resources", tabName = "resources",
                        icon = icon("list")),
               menuItem("View Code",
-                       href = "https://github.com/takaakimasaki/eviatlas",
+                       href = "https://github.com/takaakimasaki/FDPDataAtlas",
                        icon = icon("github"))
   )
 )
