@@ -18,7 +18,7 @@ pacman::p_load(devtools,dplyr,tidyverse,sf,here)
 ```
 If any update has been made in the metadata, run this chunk. 
 ```{r, echo=FALSE, eval=FALSE}
-metadata <- read_csv(here::here("inst","extdata","metadata.csv")) %>% filter(!is.na(Longitude))
+metadata <- read_csv(here::here("inst","extdata","metadata_v2.csv")) %>% filter(!is.na(Longitude))
 bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds")) 
 
 list_inc <- bounds %>% 
@@ -28,8 +28,11 @@ list_inc <- bounds %>%
 
 #bounds <- read_rds(here::here("inst","extdata","UNHCR_bounds.rds")) %>%
 #  select(ISO_A3=Country_te)
+
+list_drop <- c("asy_ven","NY.GDP.PCAP.CD","ref_ven","SL.UEM.TOTL.ZS","SP.POP.TOTL")
 ref_data <- read_rds(here::here("inst","extdata","wb_bounds_stats.rds")) %>%
   #filter(!is.na(value)) %>%
+  filter(!indicator %in% list_drop) %>%
   filter(ISO_A3 %in% list_inc$ISO_A3)
 #get the centroid of those countries
 bounds$geom_valid <- st_is_valid(bounds)
