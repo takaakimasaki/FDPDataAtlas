@@ -1,3 +1,4 @@
+#pacman::p_load(dplyr, stringr,ggplot2,tidyr,DT,leaflet,leaflet.providers,htmltools,htmlwidgets,mapview,leafem,sf, viridis, shiny, shinydashboard,shinyWidgets,shinyBS,RColorBrewer,FDPDataAtlas)
 library(dplyr)
 library(stringr)
 library(ggplot2)
@@ -185,7 +186,7 @@ body <- dashboardBody(
                              selectInput(
                                inputId = "selected_variable",
                                label = "Select variable",
-                               choices = unique(eviatlas::ref_data$indicator)
+                               choices = unique(FDPDataAtlas::ref_data$indicator)
                            ),
                            column(5,
                                   uiOutput("atlas_popups"),

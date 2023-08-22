@@ -1,7 +1,7 @@
 ## server.R ##
 
 # load functions
-library(eviatlas)
+library(FDPDataAtlas)
 library(dplyr)
 library(stringr)
 library(ggplot2)
@@ -120,8 +120,8 @@ shinyServer(
     # if user switches to internal data, clear in-app data
     observeEvent(input$sample_or_real, {
       if(input$sample_or_real == "sample"){
-        data_internal$raw <- eviatlas::metadata %>% as.data.frame()
-        #data_internal$raw <- eviatlas::eviatlas_pilotdata
+        data_internal$raw <- FDPDataAtlas::metadata %>% as.data.frame()
+        #data_internal$raw <- FDPDataAtlas::FDPDataAtlas_pilotdata
         #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
       } else {
         data_internal$raw <- NULL
@@ -160,7 +160,7 @@ shinyServer(
     # output$go_button <- renderUI({
     #   if(!is.null(data_internal$raw)){
     #       actionButton("go_subset", "Apply Filter")
-    #   } else {wellPanel('To start, upload data in the "About EviAtlas" tab.')}
+    #   } else {wellPanel('To start, upload data in the "About FDPDataAtlas" tab.')}
     # })
     #
     # observeEvent(input$go_subset, {
@@ -338,7 +338,7 @@ shinyServer(
 
     # # download the filtered data
     # output$download_filtered = downloadHandler(
-    #   'eviatlas-datatable-filtered.csv',
+    #   'FDPDataAtlas-datatable-filtered.csv',
     #   content = function(file) {
     #     s = input$filtered_table_rows_all
     #     write.csv(data_internal$filtered[s, , drop = FALSE], file)
@@ -441,7 +441,7 @@ shinyServer(
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
       req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
-      colnames <- eviatlas::metadata %>% dplyr::select(!where(is.numeric)) %>% colnames()
+      colnames <- FDPDataAtlas::metadata %>% dplyr::select(!where(is.numeric)) %>% colnames()
       div(
         title="Select variable to color points by",
         selectInput(
@@ -537,7 +537,7 @@ shinyServer(
     })
 
     output$save_plot_1 <- downloadHandler(
-      filename = 'eviatlas1.png',
+      filename = 'FDPDataAtlas1.png',
       content = function(file) {
         device <- function(..., width, height) {
           grDevices::png(..., width = width, height = height,
@@ -548,7 +548,7 @@ shinyServer(
     )
 
     output$save_plot_2 <- downloadHandler(
-      filename = 'eviatlas2.png',
+      filename = 'FDPDataAtlas2.png',
       content = function(file) {
         device <- function(..., width, height) {
           grDevices::png(..., width = width, height = height,
@@ -608,7 +608,7 @@ shinyServer(
     # })
 
     output$save_heatmap <- downloadHandler(
-      filename = 'eviatlasHeatmap.png',
+      filename = 'FDPDataAtlasHeatmap.png',
       content = function(file) {
         device <- function(..., width, height) {
           grDevices::png(..., width = width, height = width,
@@ -633,7 +633,7 @@ shinyServer(
           "function(el, x) {
             L.easyPrint({
               sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-              filename: 'EviAtlasMap',
+              filename: 'FDPDataAtlasMap',
               exportOnly: true,
               hideControlContainer: true
             }).addTo(this);
@@ -721,7 +721,7 @@ shinyServer(
 
       #Refugee statistics
       ref_data_filtered <- reactive({
-        eviatlas::ref_data %>%
+        FDPDataAtlas::ref_data %>%
           filter(indicator==input$selected_variable)
       })
 
@@ -745,7 +745,7 @@ shinyServer(
                                   label = ~lapply(popup_string(), shiny::HTML),
                                   clusterOptions = eval(cluster_options())) %>%
                                     addPolygons(
-                                      data = eviatlas::bounds,
+                                      data = FDPDataAtlas::bounds,
                                       fillColor = ~ pal(ref_data_filtered()$value),
                                       color = "white", # set the border color (e.g., black, blue, etc)
                                       dashArray = "3", # set the dash of the border (e.g., 1,2,3, etc)
@@ -967,7 +967,7 @@ shinyServer(
     })
 
     output$savemap_interactive <- downloadHandler(
-      filename = paste0('eviAtlasMap', Sys.Date(), '.html'),
+      filename = paste0('FDPDataAtlasMap', Sys.Date(), '.html'),
       content = function(file){
         saveWidget(
           widget = atlas_for_saving(),
@@ -976,7 +976,7 @@ shinyServer(
     )
 
     output$savemap_pdf <- downloadHandler(
-      filename = paste0('eviAtlasMap', Sys.Date(), '.pdf'),
+      filename = paste0('FDPDataAtlasMap', Sys.Date(), '.pdf'),
       content = function(file) {
         mapview::mapshot(x = atlas_for_saving(),
                          file = file,
@@ -986,7 +986,7 @@ shinyServer(
     )
 
     output$savemap_png <- downloadHandler(
-      filename = paste0('eviAtlasMap', Sys.Date(), '.png'),
+      filename = paste0('FDPDataAtlasMap', Sys.Date(), '.png'),
       content = function(file) {
         mapview::mapshot(x = atlas_for_saving(),
                          file = file,
