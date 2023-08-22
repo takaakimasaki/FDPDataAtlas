@@ -1,8 +1,8 @@
-#' A wrapper function to run Shiny Apps from \code{eviatlas}.
+#' A wrapper function to run Shiny Apps from \code{FDPDataAtlas}.
 #' 
-#' Running this function will launch the eviatlas shiny
-#' @return eviatlas shiny app
-#' @param app eviatlas 
+#' Running this function will launch the FDPDataAtlas shiny
+#' @return FDPDataAtlas shiny app
+#' @param app FDPDataAtlas 
 #' @import shiny
 #' @import shinyBS
 #' @import RColorBrewer
@@ -16,10 +16,10 @@
 #' 
 #' @export
 
-runShiny <- function(app="eviatlas"){
+runShiny <- function(app="FDPDataAtlas"){
   
   # find and launch the app
-  appDir <- system.file("shiny-examples", app, package = "eviatlas")
+  appDir <- system.file("shiny-examples", app, package = "FDPDataAtlas")
   
   shiny::runApp(appDir, display.mode = "normal")
 }

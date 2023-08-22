@@ -1,7 +1,7 @@
 #' Plot systematic map from shapefile inputs
 #'
 #' Created For ES Hackathon 2018
-#' @param shp shapefile input in to eviatlas
+#' @param shp shapefile input in to FDPDataAtlas
 #' @param popups Column with popup information
 #' @import leaflet
 #' @import leafem

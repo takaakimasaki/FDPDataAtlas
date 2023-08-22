@@ -2,7 +2,7 @@
 title: "How to use FDPDataAtlas"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How_to_use_Evitlas}
+  %\VignetteIndexEntry{How_to_use_FDPDataAtlas}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

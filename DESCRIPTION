@@ -1,5 +1,5 @@
-Package: eviatlas
-Title: EviAtlas a Shiny App for Visualising Datasets Produced by Systematic Maps
+Package: FDPDataAtlas
+Title: FDPDataAtlas a Shiny App for Visualising Microdata on forcibly displaced people
 Version: 0.5
 Authors@R: 
     c(person("Matt", "Grainger", , "matthewjamesgrainger@gmail.com", role = c("aut", "cre"),

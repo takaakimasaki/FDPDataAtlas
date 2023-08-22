@@ -7,7 +7,7 @@
 sys_map_shapefile(shp, popups = "")
 }
 \arguments{
-\item{shp}{shapefile input in to eviatlas}
+\item{shp}{shapefile input in to FDPDataAtlas}
 
 \item{popups}{Column with popup information}
 }

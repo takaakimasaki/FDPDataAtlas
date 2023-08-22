@@ -2,16 +2,16 @@
 % Please edit documentation in R/runShiny.R
 \name{runShiny}
 \alias{runShiny}
-\title{A wrapper function to run Shiny Apps from \code{eviatlas}.}
+\title{A wrapper function to run Shiny Apps from \code{FDPDataAtlas}.}
 \usage{
-runShiny(app = "eviatlas")
+runShiny(app = "FDPDataAtlas")
 }
 \arguments{
-\item{app}{eviatlas}
+\item{app}{FDPDataAtlas}
 }
 \value{
-eviatlas shiny app
+FDPDataAtlas shiny app
 }
 \description{
-Running this function will launch the eviatlas shiny
+Running this function will launch the FDPDataAtlas shiny
 }
