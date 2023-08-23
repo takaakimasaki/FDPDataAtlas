@@ -59,7 +59,10 @@ runShiny()
 ```
 
 Lastly, launch the app but make sure that you first install FDPDataAtlas through install_github("takaakimasaki/FDPDataAtlas") otherwise it returns an error. 
+
+To install FDPDataAtlas afresh from GitHub, you need to restart your RStudio.
 ```{r}
 remotes::install_github("takaakimasaki/FDPDataAtlas") 
+library(FDPDataAtlas)
 runShiny()
 ```
