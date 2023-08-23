@@ -326,11 +326,19 @@ shinyServer(
                     style='bootstrap',
                     options = list(scrollX = TRUE,
                                    scrollY = TRUE,
-                                   pageLength = 1,
+                                   pageLength = 10,
                                    autoWidth = FALSE,
                                    responsive=T,
                                    dom='Blfrtip',
-                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+                                   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                                   columnDefs = list(list(
+                                     targets = "_all",
+                                     render = JS(
+                                       "function(data, type, row, meta) {",
+                                       "return type === 'display' && data != null && data.length > 30 ?",
+                                       "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
+                                       "}")
+                                   ))
                                    ), #,
                     class="display"
       ),
