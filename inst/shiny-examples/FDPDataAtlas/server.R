@@ -129,7 +129,7 @@ shinyServer(
     # give an outline of what that dataset contains
     output$data_summary <- renderTable({
       if(!is.null(data_internal$raw)){
-        datadict <- read.csv("../../../data/datadict_official.csv")
+        datadict <- read.csv("../../../data/datadictionary.csv")
         return(datadict)
       }
     })
