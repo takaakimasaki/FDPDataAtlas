@@ -30,9 +30,9 @@ if(webshot::is_phantomjs_installed()==FALSE){
 # load data + text
 #load("www/pilotdata.rdata")
 start_text <- read_file("www/AboutEvi.html")
-about_sysmap_text <- read_file("www/AboutSysMap.html")
-how_cite_text <- read_file("www/HowCiteEvi.html")
-how_works_text <- read_file("www/HowEviWorks.html")
+# about_sysmap_text <- read_file("www/AboutSysMap.html")
+# how_cite_text <- read_file("www/HowCiteEvi.html")
+# how_works_text <- read_file("www/HowEviWorks.html")
 
 # maximum upload size 100 MB-- could be increased if proves problematic for users and we have server space
 max_file_size_mb <- 100
@@ -52,6 +52,9 @@ shinyServer(
 
     # DATA TAB
     # if no data are available but input$sample_or_real == 'sample', show intro text
+    
+    data_internal$raw <- FDPDataAtlas::metadata %>% as.data.frame()
+    
     output$start_text <- renderPrint({
       cat(start_text)
     })
@@ -65,13 +68,6 @@ shinyServer(
       cat(how_cite_text)
     })
 
-    output$uploaded_attributes <- renderPrint({
-      if(is.null(data_internal$raw) & input$sample_or_real == 'user'){
-        cat("Upload a dataset using the panel to the right -->")
-      } else {
-        cat("<h3>Attributes of uploaded data:</h3>")
-      }
-    })
 
     # if CSV data are supplied, add them to data_internal
     observeEvent(input$sysmapdata_upload, {
@@ -117,29 +113,24 @@ shinyServer(
       # d_out
     })
 
-    # if user switches to internal data, clear in-app data
-    observeEvent(input$sample_or_real, {
-      if(input$sample_or_real == "sample"){
-        data_internal$raw <- FDPDataAtlas::metadata %>% as.data.frame()
-        #data_internal$raw <- FDPDataAtlas::FDPDataAtlas_pilotdata
-        #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
-      } else {
-        data_internal$raw <- NULL
-        #data_internal$filtered <- NULL
-      }
-    })
-
+    # # if user switches to internal data, clear in-app data
+    # observeEvent(input$sample_or_real, {
+    #   if(input$sample_or_real == "sample"){
+    #     data_internal$raw <- FDPDataAtlas::metadata %>% as.data.frame()
+    #     #data_internal$raw <- FDPDataAtlas::FDPDataAtlas_pilotdata
+    #     #data_internal$filtered <- data_internal$raw #instantiate filtered table with raw values
+    #   } else {
+    #     data_internal$raw <- NULL
+    #     #data_internal$filtered <- NULL
+    #   }
+    # })
+    
+    
     # give an outline of what that dataset contains
-    output$data_summary <- renderPrint({
+    output$data_summary <- renderTable({
       if(!is.null(data_internal$raw)){
-        cat(paste0(
-          "You've uploaded a dataset containing ", nrow(data_internal$raw),
-          " rows and ", ncol(data_internal$raw),
-          " columns. If this is not what you expected, you might want to",
-          " adjust the CSV properties settings on the right and try again.<br>",
-          "<br> Detected column names as follows:<br>",
-          paste(colnames(data_internal$raw), collapse = "<br>")
-        ))
+        datadict <- read.csv("../../../data/datadict_official.csv")
+        return(datadict)
       }
     })
 
@@ -372,7 +363,7 @@ shinyServer(
     # })
 
     output$atlas_link_popup <- renderUI({
-      req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
+      # req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
 
       div(
         title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
@@ -418,7 +409,7 @@ shinyServer(
 
     output$cluster_columns <- renderUI({
       req(data_internal$raw)
-      req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
+      # req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
 
       div(
         title = "Toggle displaying points in relative geographic clusters",
@@ -432,7 +423,7 @@ shinyServer(
     })
 
     output$cluster_size <- renderUI({
-      req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
+      # req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
 
       div(
         title = "Adjust cluster sensitivity. Higher numbers correspond to smaller distances",
@@ -448,7 +439,7 @@ shinyServer(
 
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
-      req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
+      # req(input$sample_or_real != "shapefile") #does not work for shapefiles currently
       colnames <- FDPDataAtlas::metadata %>% dplyr::select(!where(is.numeric)) %>% colnames()
       div(
         title="Select variable to color points by",
@@ -626,14 +617,9 @@ shinyServer(
       }
     )
 
-    generate_systematic_map <- reactive({
-      # Generate basemap
-      if (input$sample_or_real == "shapefile") {
-        sys_map_shapefile(data_active(), popups = popup_string())
-      } else {
+    generate_systematic_map <- reactive(
         sys_map(data_active() )
-      }
-    })
+    )
 
     output$map <- renderLeaflet({
       generate_systematic_map() %>%
@@ -682,7 +668,7 @@ shinyServer(
 
     observe({
       req(!is.null(input$atlas_color_by_select)) #could be anything in the evidence atlas pane
-      req(input$sample_or_real != 'shapefile') #shapefiles are handled differently, so they have their own section
+      # req(input$sample_or_real != 'shapefile') #shapefiles are handled differently, so they have their own section
 
       radiusby <- input$atlas_radius_select
 
