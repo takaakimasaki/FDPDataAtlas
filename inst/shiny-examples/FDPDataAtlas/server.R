@@ -106,17 +106,17 @@ shinyServer(
       server = F
     )
 
-    output$atlas_link_popup <- renderUI({
-      div(
-        title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
-        selectInput(
-          inputId = "map_link_select",
-          label = "Select Link Column (in pop-up)",
-          choices = c("", "data_url"),
-          selected = "data_url"
-        )
-      )
-    })
+    # output$atlas_link_popup <- renderUI({
+    #   div(
+    #     title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
+    #     selectInput(
+    #       inputId = "map_link_select",
+    #       label = "Select Link Column (in pop-up)",
+    #       choices = c("", "data_url"),
+    #       selected = "data_url"
+    #     )
+    #   )
+    # })
 
 
     output$atlas_selectmap <- renderUI({
@@ -145,33 +145,33 @@ shinyServer(
       )
     })
 
-    output$cluster_columns <- renderUI({
-      req(data_internal$raw)
+    # output$cluster_columns <- renderUI({
+    #   req(data_internal$raw)
 
-      div(
-        title = "Toggle displaying points in relative geographic clusters",
-        shinyWidgets::materialSwitch(
-          inputId = "map_cluster_select",
-          label = "Cluster Map Points?",
-          value = TRUE,
-          status = "primary"
-        )
-      )
-    })
+    #   div(
+    #     title = "Toggle displaying points in relative geographic clusters",
+    #     shinyWidgets::materialSwitch(
+    #       inputId = "map_cluster_select",
+    #       label = "Cluster Map Points?",
+    #       value = TRUE,
+    #       status = "primary"
+    #     )
+    #   )
+    # })
 
-    output$cluster_size <- renderUI({
-      div(
-        title = "Adjust cluster sensitivity. Higher numbers correspond to smaller distances",
-        shinyWidgets::noUiSliderInput(
-          inputId = "cluster_size_select",
-          label = "Cluster Sensitivity",
-          value = 4,
-          step = 1,
-          min = 6,
-          max = 16
-        )
-      )
-    })
+    # output$cluster_size <- renderUI({
+    #   div(
+    #     title = "Adjust cluster sensitivity. Higher numbers correspond to smaller distances",
+    #     shinyWidgets::noUiSliderInput(
+    #       inputId = "cluster_size_select",
+    #       label = "Cluster Sensitivity",
+    #       value = 4,
+    #       step = 1,
+    #       min = 6,
+    #       max = 16
+    #     )
+    #   )
+    # })
 
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
@@ -327,16 +327,6 @@ shinyServer(
       input$cluster_size_select
     })
 
-# Initialize an empty reactiveVal
-filtered_data <- reactiveVal(data.frame())
-
-# Capture click events
-observeEvent(input$map_marker_click, {
-  clicked_country <- input$map_marker_click$id
-  filtered_data(data_active()[data_active()$country == clicked_country, ])
-})
-
-
 
     observe({
       req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
@@ -397,24 +387,50 @@ observeEvent(input$map_marker_click, {
       custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
       circle_pal <- colorNumeric(palette = custom_pal(5), domain = data_active()$total_of_country)
 
-    polygon_labels <- sprintf("<h4>%s</h4> <br> <b>%s<b>: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$indicator,ref_data_filtered()$value) %>%
-        lapply(htmltools::HTML)
-      # show data_active() for debugging
-      observe({
-        print(colnames(ref_data_filtered()))
-      })
-    popup_string <- reactive({
-      popup_string <- ''
-      #TODO: Vectorize this
-      for (popup in input$map_popup_select) {
-        popup_string = paste0(
-          popup_string, "<strong>", popup, '</strong>: ',
-          str_replace_all(str_wrap(data_active()[[popup]]), coll("\n"), "<br/>"), "<br/>"
-        )
-      }
-      popup_string
-    })
 
+
+    polygon_labels <- sprintf("<h5>%s</h5> <br> <b>%s</b>: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$indicator,ref_data_filtered()$value) %>%
+        lapply(htmltools::HTML)
+
+
+# Function to generate popup text based on selected columns and ISO_A3
+generate_popup_text <- function(selected_columns, data_active) {
+
+  filtered_data <- dplyr::filter(data_active(), nation_abbreviation == "BRA")
+  
+  popup_text <- ""
+  
+  for (i in 1:nrow(filtered_data)) {
+    
+    row <- filtered_data[i,]
+    
+    for (col in selected_columns) {
+    
+      value <- row[[col]]
+      
+      popup_text <- paste0(popup_text, 
+        "<strong>", col, ":</strong> ", value, "<br>")
+        
+    }
+    
+    popup_text <- paste0(popup_text, "<br>")
+    
+  }
+
+  return(popup_text)
+
+}
+
+# Function to generate the complete popup content
+generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) {
+  # Generate popup text based on selected columns and ISO_A3
+  popup_text <- generate_popup_text(input_map_popup_select, data_active())
+
+  # Create the final popup string
+  popup_info <- paste("Country code:", ISO_A3, "<br>", popup_text)
+
+  return(popup_info)
+}
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
         leaflet::addPolygons(
@@ -425,7 +441,9 @@ observeEvent(input$map_marker_click, {
           weight = 1, # set the thickness of the border (e.g., 1,2,3, etc)
           fillOpacity = 0.7, # set the transparency of the border (range: 0-1)
           label = polygon_labels,
-          popup = ~ paste(popup_string()),
+          # popup = ~ generate_popup_content(ISO_A3,data_active()),
+          popup = ~ generate_popup_content(ISO_A3, data_active, input$map_popup_select)
+         # popup = ~ paste("code", ISO_A3)
         ) %>%
         leaflet::addCircleMarkers(
           lat = ~lat_plotted, lng = ~lng_plotted,
@@ -701,6 +719,6 @@ observeEvent(input$map_marker_click, {
     )
 
 
-    outputOptions(output, "cluster_columns", suspendWhenHidden = FALSE)
+    # outputOptions(output, "cluster_columns", suspendWhenHidden = FALSE)
   }
 )

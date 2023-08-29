@@ -96,7 +96,12 @@ body <- dashboardBody(
     ),
 
     tabItem(tabName = "home",
-            fluidRow(
+    fluidRow(
+              wellPanel(
+                box(width = 10, home)
+              )
+            ),
+    fluidRow(
               tabsetPanel(
                 tabPanel("Configure Map",
                          wellPanel(
@@ -130,9 +135,6 @@ body <- dashboardBody(
                                                                ticks = F)))
                          ))
                 )),
-                # tabPanel('Advanced Options',
-                #          column(2,
-                #                 textInput('atlas_opacity_select', 'Placeholder for Opacity'))),
                 tabPanel('Save Map',
                          wellPanel(
                            downloadButton(outputId = "savemap_interactive",
@@ -152,12 +154,8 @@ body <- dashboardBody(
                                      placement = "bottom", trigger = "hover")
 
                          )))
-            ),
-            fluidRow(
-              wellPanel(
-                box(width = 15, home)
-              )
             )
+            
     ),
 
     tabItem(
