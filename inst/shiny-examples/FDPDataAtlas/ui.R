@@ -178,7 +178,7 @@ body <- dashboardBody(
               )
             ),
             wellPanel(
-              plotOutput("plot2"),
+              plotlyOutput("plot2", width = "100%", height = "75vh"),
               downloadButton("save_plot_2")
             )
     ),

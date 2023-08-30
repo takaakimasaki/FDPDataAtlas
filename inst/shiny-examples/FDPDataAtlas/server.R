@@ -530,7 +530,7 @@ shinyServer(
       GenDescPlots(data_active(), input$select_loc_col)
     })
 
-    output$plot2 <- renderPlot({
+    output$plot2 <- renderPlotly({
       req(input$select_loc_col)
       gen_location_trend_plot()
     })

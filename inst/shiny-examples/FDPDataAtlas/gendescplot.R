@@ -59,5 +59,8 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 15){
     locmp <- locmp + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 11))
   }
   
-  return(locmp)
+  # Convert to Plotly
+  interactive_plot <- ggplotly(locmp)
+  
+  return(interactive_plot)
 }
