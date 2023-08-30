@@ -487,7 +487,7 @@ shinyServer(
         inputId = "select_loc_col",
         label = "Plot the number of datasets by:",
         choices = c("", get_histogram_viable_columns(data_active())),
-        selected = ""
+        selected = "nation_abbreviation"
       )
     })
 
@@ -525,9 +525,9 @@ shinyServer(
     })
 
     #geom_bar rather than geom_histogram so that non-continous variables can be plotted
-
+    source("gendescplot.R")
     gen_location_trend_plot <- reactive({
-      GenLocationTrend(data_active(), input$select_loc_col)
+      GenDescPlots(data_active(), input$select_loc_col)
     })
 
     output$plot2 <- renderPlot({

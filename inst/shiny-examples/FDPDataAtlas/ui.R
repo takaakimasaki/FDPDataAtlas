@@ -175,14 +175,6 @@ body <- dashboardBody(
                        fluidRow(
                          column(4, uiOutput("location_plot_selector"))
                        ),
-                       # fluidRow(
-                       #   materialSwitch(
-                       #     inputId = "barplots_filter_select",
-                       #     label = "Use filtered data:",
-                       #     value = FALSE,
-                       #     status = "primary"
-                       #   )
-                       # )
               )
             ),
             wellPanel(
