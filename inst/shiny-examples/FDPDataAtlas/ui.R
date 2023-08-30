@@ -171,17 +171,15 @@ body <- dashboardBody(
       )
     ),
     tabItem(tabName = "insightplots",
-            tabsetPanel(
-              tabPanel('Plot Inputs',
-                       fluidRow(
-                         column(4, uiOutput("location_plot_selector"))
-                       ),
-              )
-            ),
-            wellPanel(
-              plotlyOutput("plot2", width = "100%", height = "75vh")
-            )
-    ),
+        fluidRow(
+          column(12, uiOutput("location_plot_selector"))  # Full width
+        ),
+        wellPanel(
+          plotlyOutput("plot2", width = "100%", height = "75vh")
+        )
+)
+
+,
     tabItem(tabName = "heatmap",
             fluidRow(
               uiOutput("heatmap_selector")),
