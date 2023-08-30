@@ -547,17 +547,6 @@ shinyServer(
       }
     )
 
-    output$save_plot_2 <- downloadHandler(
-      filename = 'FDPDataAtlas2.png',
-      content = function(file) {
-        device <- function(..., width, height) {
-          grDevices::png(..., width = width, height = height,
-                         res = 300, units = "in")
-        }
-        ggsave(file, plot = gen_location_trend_plot(), device = device)
-      }
-    )
-
     gen_heatmap <- reactive({
       GenHeatMap(data_active(), c(input$heat_select_x, input$heat_select_y))
     })
