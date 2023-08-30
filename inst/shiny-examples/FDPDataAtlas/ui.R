@@ -2,6 +2,7 @@
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(plotly)
 library(tidyr)
 library(DT)
 library(leaflet)
