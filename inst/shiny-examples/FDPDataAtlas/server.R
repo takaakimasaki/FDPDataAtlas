@@ -149,8 +149,6 @@ shinyServer(
       )
     })
 
-
-
     # Location Frequency Plot
     output$location_plot_selector <- renderUI({
       req(data_internal$raw)
@@ -263,7 +261,6 @@ shinyServer(
       }
     )
 
-
     # Data Atlas Tab
     generate_systematic_map <- reactive(
       sys_map(data_active())
@@ -289,9 +286,7 @@ shinyServer(
 
 
     observe({
-      req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
-
-      # radiusby <- input$atlas_radius_select
+      req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas panel
 
       lat_plotted <-
         as.numeric(unlist(data_active() %>%
@@ -301,7 +296,7 @@ shinyServer(
           dplyr::select(Longitude)))
 
       # replace missing lat/long with standard locations chosen by 'nonplotted' input
-      # if(input$nonplotted == 'Not plotted'){
+      
       lat_plotted[is.na(lat_plotted)] <- 0
       lng_plotted[is.na(lng_plotted)] <- -20
 
