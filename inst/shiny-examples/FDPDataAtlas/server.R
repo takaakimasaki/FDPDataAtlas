@@ -380,8 +380,8 @@ output$country_info <- renderUI({
         "<div>",
           "<a href='javascript:void(0);' onclick='toggleInfo(\"", unique_id, "\");'>", statement_titles[i], "</a>",
           "<div id='", unique_id, "' style='display:none;'>",
-            "URL:", "<a target='_blank' href='", data_urls[i], "'>", data_urls[i], "</a><br>",
-            "Abstract: ", abstract[i], "<br>",
+            "URL: ", "<a target='_blank' href='", data_urls[i], "'>", data_urls[i], "</a><br/>",
+            "Abstract: ", abstract[i], "<br/>",
           "</div>",
         "</div>",
         "<br>"
