@@ -12,7 +12,7 @@
 #'
 #' @export
 
-GenDescPlots = function(df, location_column, axis_txt_lim = 15){
+GenDescPlots = function(df, location_column, axis_txt_lim = 20){
   # Count per locations --------
   location_counts <- as.data.frame(table(df[location_column])) # table() tabulates frequency
   colnames(location_counts)<-c(location_column, "n")
