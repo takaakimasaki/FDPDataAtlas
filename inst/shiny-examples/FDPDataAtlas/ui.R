@@ -76,7 +76,7 @@ home <- tags$html(
     "#map {height: calc(100vh - 240px) !important;}"
   ),
   tags$body(
-    leafletOutput("map")
+    leafletOutput("map", height = 600)
   )
 )
 
@@ -117,10 +117,11 @@ body <- dashboardBody(
     tabItem(
       tabName = "home",
       fluidRow(
-        column(9, box(width = 12, home)),
-        column(3, wellPanel(
-          uiOutput("country_info")))
-      ),
+  column(9, box(width = 12, home), style = "padding-right: 0px;"),
+  column(3, wellPanel(
+    tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),
+    uiOutput("country_info")), style = "padding-left: 0px;")
+),
       fluidRow(
         column(
           width = 12,

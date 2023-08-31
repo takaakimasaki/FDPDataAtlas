@@ -344,30 +344,69 @@ shinyServer(
         lapply(htmltools::HTML)
 
 
-      # Observe any map shape click events
+      # Observe click events
       observe({
         click <- input$map_shape_click
         if (is.null(click)) {
           return()
         }
-
-        # Extract clicked ISO_A3 from the clicked shape's id
-        # clicked_ISO <- FDPDataAtlas::bounds[click$id, "ISO_A3"]
         clicked_ISO_A3(click$id)
       })
 
-
       # Display info in sidebar
-      output$country_info <- renderUI({
-        if (is.null(clicked_ISO_A3())) {
-          return(p("No country selected"))
-        } else {
-          # Display country information here
-          return(p(
-            paste("Selected country ISO_A3:", clicked_ISO_A3())
-          ))
-        }
-      })
+output$country_info <- renderUI({
+  if (is.null(clicked_ISO_A3())) {
+    return(p("Select a country."))
+  } else {
+    filtered_data <- FDPDataAtlas::metadata %>% 
+      filter(nation_abbreviation == clicked_ISO_A3())
+
+    if (nrow(filtered_data) == 0) {
+      return(p("No information available for this country."))
+    }
+
+    nation_names <- filtered_data$nation_name
+    statement_titles <- filtered_data$statement_title
+    data_urls <- filtered_data$data_url
+    nation_abbreviation <- filtered_data$nation_abbreviation
+    abstract <- filtered_data$abstract
+
+    text_to_display <- paste0("<h3>", head(filtered_data$nation_name, 1), "</h3>")
+
+    for(i in 1:length(nation_names)) {
+      unique_id <- paste0("info", i)
+      text_to_display <- paste0(
+        text_to_display,
+        "<div>",
+          "<a href='javascript:void(0);' onclick='toggleInfo(\"", unique_id, "\");'>", statement_titles[i], "</a>",
+          "<div id='", unique_id, "' style='display:none;'>",
+            "URL:", "<a target='_blank' href='", data_urls[i], "'>", data_urls[i], "</a><br>",
+            "Abstract: ", abstract[i], "<br>",
+          "</div>",
+        "</div>",
+        "<br>"
+      )
+    }
+
+    text_to_display <- paste0(
+      "<script>",
+        "function toggleInfo(id) {",
+          "var x = document.getElementById(id);",
+          "if (x.style.display === 'none') {",
+            "x.style.display = 'block';",
+          "} else {",
+            "x.style.display = 'none';",
+          "}",
+        "}",
+      "</script>",
+      text_to_display
+    )
+    
+    return(HTML(text_to_display))
+  }
+})
+
+
 
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
@@ -383,10 +422,11 @@ shinyServer(
         ) %>%
         leaflet::addCircleMarkers(
           lat = ~lat_plotted, lng = ~lng_plotted,
+          layerId = ~nation_abbreviation,
           radius = 1 * data_active()$total_of_country,
           color = circle_pal(data_active()$total_of_country),
           stroke = FALSE,
-          fillOpacity = 0.3
+          fillOpacity = 0.7
         ) %>%
         leaflet::addLegend(
           pal = pal,
