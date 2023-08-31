@@ -126,7 +126,7 @@ body <- dashboardBody(
           width = 12,
           wellPanel( 
             fluidRow(
-              selectInput(
+              radioButtons(
                 inputId = "selected_variable",
                 label = "Select variable",
                 choices = unique(FDPDataAtlas::ref_data$indicator)

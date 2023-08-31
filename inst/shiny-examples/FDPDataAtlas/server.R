@@ -120,20 +120,6 @@ shinyServer(
       )
     })
 
-
-    output$atlas_popups <- renderUI({
-      div(
-        selectizeInput(
-          inputId = "map_popup_select",
-          label = "Select Popup Info",
-          selected = c("statement_title", "data_url"),
-          choices = colnames(data_active()),
-          multiple = T
-        )
-      )
-    })
-
-
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
       colnames <- FDPDataAtlas::metadata %>%
@@ -271,8 +257,8 @@ shinyServer(
     )
 
 
-  # Create a reactive value to store clicked country ISO_A3
-  clicked_ISO_A3 <- reactiveVal(NULL)
+    # Create a reactive value to store clicked country ISO_A3
+    clicked_ISO_A3 <- reactiveVal(NULL)
 
     output$map <- renderLeaflet({
       generate_systematic_map() %>%
@@ -344,7 +330,7 @@ shinyServer(
         FDPDataAtlas::ref_data %>%
           filter(indicator == input$selected_variable)
       })
-  
+
       breaks <- quantile(ref_data_filtered()$value, probs = seq(0, 1, 0.25), na.rm = TRUE)
       breaks <- rev(breaks)
       pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
@@ -354,96 +340,53 @@ shinyServer(
 
 
 
-    polygon_labels <- sprintf("<h5>%s</h5> <br> <b>%s</b>: %g", ref_data_filtered()$NAME_EN, ref_data_filtered()$indicator,ref_data_filtered()$value) %>%
+      polygon_labels <- sprintf("<h5>%s</h5>", ref_data_filtered()$NAME_EN) %>%
         lapply(htmltools::HTML)
 
 
-# Function to generate popup text based on selected columns and ISO_A3
-generate_popup_text <- function(selected_columns, data_active) {
+      # Observe any map shape click events
+      observe({
+        click <- input$map_shape_click
+        if (is.null(click)) {
+          return()
+        }
 
-  filtered_data <- dplyr::filter(data_active(), nation_abbreviation == "BRA")
-  
-  popup_text <- ""
-  
-  for (i in 1:nrow(filtered_data)) {
-    
-    row <- filtered_data[i,]
-    
-    for (col in selected_columns) {
-    
-      value <- row[[col]]
-      
-      popup_text <- paste0(popup_text, 
-        "<strong>", col, ":</strong> ", value, "<br>")
-        
-    }
-    
-    popup_text <- paste0(popup_text, "<br>")
-    
-  }
-
-  return(popup_text)
-
-}
-
-  # Observe any map shape click events
-  observe({
-    click <- input$map_click$id
-    if(is.null(click)) return()
-
-    # Extract clicked ISO_A3 from the clicked shape's id
-    # clicked_ISO <- FDPDataAtlas::bounds[click$id, "ISO_A3"]
-    clicked_ISO_A3(click)
-  })
+        # Extract clicked ISO_A3 from the clicked shape's id
+        # clicked_ISO <- FDPDataAtlas::bounds[click$id, "ISO_A3"]
+        clicked_ISO_A3(click$id)
+      })
 
 
-  # Display info in sidebar
-  output$country_info <- renderUI({
-    if (is.null(clicked_ISO_A3())) {
-      return(p("No country selected"))
-    } else {
-      # Display country information here
-      return(p(paste("Selected country ISO_A3:", clicked_ISO_A3())))
-    }
-  })
+      # Display info in sidebar
+      output$country_info <- renderUI({
+        if (is.null(clicked_ISO_A3())) {
+          return(p("No country selected"))
+        } else {
+          # Display country information here
+          return(p(
+            paste("Selected country ISO_A3:", clicked_ISO_A3())
+          ))
+        }
+      })
 
-# Function to generate the complete popup content
-generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) {
-  # Generate popup text based on selected columns and ISO_A3
-  popup_text <- generate_popup_text(input_map_popup_select, data_active())
-
-  # Create the final popup string
-  popup_info <- paste("Country code:", ISO_A3, "<br>", popup_text)
-
-  return(popup_info)
-}
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
         leaflet::addPolygons(
           data = FDPDataAtlas::bounds,
+          layerId = ~ISO_A3,
           fillColor = ~ pal(ref_data_filtered()$value),
           color = "white", # set the border color (e.g., black, blue, etc)
           dashArray = "3", # set the dash of the border (e.g., 1,2,3, etc)
           weight = 1, # set the thickness of the border (e.g., 1,2,3, etc)
           fillOpacity = 0.7, # set the transparency of the border (range: 0-1)
-          label = polygon_labels,
-          # popup = ~ generate_popup_content(ISO_A3,data_active()),
-          popup = ~ generate_popup_content(ISO_A3, data_active, input$map_popup_select)
-         # popup = ~ paste("code", ISO_A3)
+          label = polygon_labels
         ) %>%
         leaflet::addCircleMarkers(
           lat = ~lat_plotted, lng = ~lng_plotted,
-          # popup = ~ paste(popup_string()),
-          # popupOptions = popupOptions(
-          #   maxWidth = 500,
-          #   maxHeight = 200
-          # ),
-          radius = 10,
+          radius = 1 * data_active()$total_of_country,
           color = circle_pal(data_active()$total_of_country),
           stroke = FALSE,
-          fillOpacity = 0.7,
-          label = ~total_of_country,
-          labelOptions = labelOptions(noHide = TRUE, offset = c(0, 0), textOnly = TRUE)
+          fillOpacity = 0.3
         ) %>%
         leaflet::addLegend(
           pal = pal,
@@ -519,7 +462,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
         }
       } # end shapefile
 
-      
+
 
       lat_plotted <-
         as.numeric(unlist(data_active() %>%
@@ -561,7 +504,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
             leaflet::addTiles() %>%
             leaflet::addCircleMarkers(
               lat = ~lat_plotted, lng = ~lng_plotted,
-              popup = ~paste(popup_string()),
+              popup = ~ paste(popup_string()),
               radius = 10,
               color = colorby,
               stroke = FALSE, fillOpacity = 0.7,
@@ -703,8 +646,5 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
         )
       }
     )
-
-  print(colnames(FDPDataAtlas::bounds))
-
   }
 )
