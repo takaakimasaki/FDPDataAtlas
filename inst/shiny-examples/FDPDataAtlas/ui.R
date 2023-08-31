@@ -118,7 +118,8 @@ body <- dashboardBody(
       tabName = "home",
       fluidRow(
         column(9, box(width = 12, home)),
-        column(3,wellPanel(p("This is a test")))
+        column(3, wellPanel(
+          uiOutput("country_info")))
       ),
       fluidRow(
         column(
@@ -179,15 +180,7 @@ body <- dashboardBody(
           "Plot Inputs",
           fluidRow(
             column(4, uiOutput("location_plot_selector"))
-          ),
-          # fluidRow(
-          #   materialSwitch(
-          #     inputId = "barplots_filter_select",
-          #     label = "Use filtered data:",
-          #     value = FALSE,
-          #     status = "primary"
-          #   )
-          # )
+          )
         )
       ),
       wellPanel(

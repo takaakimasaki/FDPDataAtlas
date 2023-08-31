@@ -133,6 +133,7 @@ shinyServer(
       )
     })
 
+
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
       colnames <- FDPDataAtlas::metadata %>%
@@ -148,6 +149,8 @@ shinyServer(
         )
       )
     })
+
+
 
     # Location Frequency Plot
     output$location_plot_selector <- renderUI({
@@ -261,10 +264,15 @@ shinyServer(
       }
     )
 
+
     # Data Atlas Tab
     generate_systematic_map <- reactive(
       sys_map(data_active())
     )
+
+
+  # Create a reactive value to store clicked country ISO_A3
+  clicked_ISO_A3 <- reactiveVal(NULL)
 
     output$map <- renderLeaflet({
       generate_systematic_map() %>%
@@ -286,7 +294,9 @@ shinyServer(
 
 
     observe({
-      req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas panel
+      req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
+
+      # radiusby <- input$atlas_radius_select
 
       lat_plotted <-
         as.numeric(unlist(data_active() %>%
@@ -296,7 +306,7 @@ shinyServer(
           dplyr::select(Longitude)))
 
       # replace missing lat/long with standard locations chosen by 'nonplotted' input
-      
+      # if(input$nonplotted == 'Not plotted'){
       lat_plotted[is.na(lat_plotted)] <- 0
       lng_plotted[is.na(lng_plotted)] <- -20
 
@@ -375,6 +385,27 @@ generate_popup_text <- function(selected_columns, data_active) {
   return(popup_text)
 
 }
+
+  # Observe any map shape click events
+  observe({
+    click <- input$map_click$id
+    if(is.null(click)) return()
+
+    # Extract clicked ISO_A3 from the clicked shape's id
+    # clicked_ISO <- FDPDataAtlas::bounds[click$id, "ISO_A3"]
+    clicked_ISO_A3(click)
+  })
+
+
+  # Display info in sidebar
+  output$country_info <- renderUI({
+    if (is.null(clicked_ISO_A3())) {
+      return(p("No country selected"))
+    } else {
+      # Display country information here
+      return(p(paste("Selected country ISO_A3:", clicked_ISO_A3())))
+    }
+  })
 
 # Function to generate the complete popup content
 generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) {
@@ -673,7 +704,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
       }
     )
 
+  print(colnames(FDPDataAtlas::bounds))
 
-    # outputOptions(output, "cluster_columns", suspendWhenHidden = FALSE)
   }
 )
