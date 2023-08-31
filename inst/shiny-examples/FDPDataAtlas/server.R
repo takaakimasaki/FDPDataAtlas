@@ -106,18 +106,6 @@ shinyServer(
       server = F
     )
 
-    # output$atlas_link_popup <- renderUI({
-    #   div(
-    #     title = "If your dataset has a link to each dataset, you can include it in the popup when a point is clicked with the mouse. If you have any hyperlinks you wish to display in the pop-up (e.g. email addresses or URLs), select them here.",
-    #     selectInput(
-    #       inputId = "map_link_select",
-    #       label = "Select Link Column (in pop-up)",
-    #       choices = c("", "data_url"),
-    #       selected = "data_url"
-    #     )
-    #   )
-    # })
-
 
     output$atlas_selectmap <- renderUI({
       req(data_internal$raw)
@@ -144,34 +132,6 @@ shinyServer(
         )
       )
     })
-
-    # output$cluster_columns <- renderUI({
-    #   req(data_internal$raw)
-
-    #   div(
-    #     title = "Toggle displaying points in relative geographic clusters",
-    #     shinyWidgets::materialSwitch(
-    #       inputId = "map_cluster_select",
-    #       label = "Cluster Map Points?",
-    #       value = TRUE,
-    #       status = "primary"
-    #     )
-    #   )
-    # })
-
-    # output$cluster_size <- renderUI({
-    #   div(
-    #     title = "Adjust cluster sensitivity. Higher numbers correspond to smaller distances",
-    #     shinyWidgets::noUiSliderInput(
-    #       inputId = "cluster_size_select",
-    #       label = "Cluster Sensitivity",
-    #       value = 4,
-    #       step = 1,
-    #       min = 6,
-    #       max = 16
-    #     )
-    #   )
-    # })
 
     output$atlas_color_by <- renderUI({
       req(data_internal$raw)
@@ -331,7 +291,7 @@ shinyServer(
     observe({
       req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
 
-      radiusby <- input$atlas_radius_select
+      # radiusby <- input$atlas_radius_select
 
       lat_plotted <-
         as.numeric(unlist(data_active() %>%
@@ -452,7 +412,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
           #   maxWidth = 500,
           #   maxHeight = 200
           # ),
-          radius = ~ as.numeric(radiusby * 3),
+          radius = 10,
           color = circle_pal(data_active()$total_of_country),
           stroke = FALSE,
           fillOpacity = 0.7,
@@ -533,7 +493,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
         }
       } # end shapefile
 
-      radiusby <- input$atlas_radius_select
+      
 
       lat_plotted <-
         as.numeric(unlist(data_active() %>%
@@ -576,7 +536,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
             leaflet::addCircleMarkers(
               lat = ~lat_plotted, lng = ~lng_plotted,
               popup = ~paste(popup_string()),
-              radius = ~ as.numeric(radiusby * 3),
+              radius = 10,
               color = colorby,
               stroke = FALSE, fillOpacity = 0.7,
               label = ~ popup_string() %>% lapply(shiny::HTML)
@@ -610,7 +570,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
             leaflet::addCircleMarkers(
               lat = ~lat_plotted, lng = ~lng_plotted,
               popup = ~ paste(popup_string()),
-              radius = ~ as.numeric(radiusby * 3),
+              radius = 10,
               color = colorby,
               stroke = FALSE, fillOpacity = 0.7,
               label = ~ popup_string() %>% lapply(shiny::HTML)
@@ -638,7 +598,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
             leaflet::addCircles(
               lat = ~lat_plotted, lng = ~lng_plotted,
               popup = ~ paste(popup_string()),
-              radius = ~ as.numeric(radiusby * 3),
+              radius = 10,
               color = colorby,
               stroke = FALSE, fillOpacity = 0.7,
               label = ~ popup_string() %>% lapply(shiny::HTML)
@@ -675,7 +635,7 @@ generate_popup_content <- function(ISO_A3, data_active, input_map_popup_select) 
             leaflet::addCircleMarkers(
               lat = ~lat_plotted, lng = ~lng_plotted,
               popup = ~ paste(popup_string()),
-              radius = ~ as.numeric(radiusby * 3),
+              radius = 10,
               color = colorby,
               stroke = FALSE, fillOpacity = 0.7,
               label = ~ popup_string() %>% lapply(shiny::HTML)
