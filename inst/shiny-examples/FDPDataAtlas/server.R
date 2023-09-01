@@ -124,23 +124,7 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  output$atlas_color_by <- renderUI({
-    req(data_internal$raw)
-    colnames <- FDPDataAtlas::metadata %>%
-      dplyr::select(!where(is.numeric)) %>%
-      colnames()
-    div(
-      title = "Select variable to color points by",
-      selectInput(
-        inputId = "atlas_color_by_select",
-        label = "Color points by:",
-        choices = c("", colnames),
-        selected = ""
-      )
-    )
-  })
-  
-  
+ 
   
   # Location Frequency Plot
   output$location_plot_selector <- renderUI({
@@ -262,6 +246,23 @@ shinyServer(function(input, output, session) {
   
   
   # Data Atlas Tab
+
+    output$atlas_color_by <- renderUI({
+    req(data_internal$raw)
+    colnames <- FDPDataAtlas::metadata %>%
+      dplyr::select(!where(is.numeric)) %>%
+      colnames()
+    div(
+      title = "Select variable to color points by",
+      selectInput(
+        inputId = "atlas_color_by_select",
+        label = "Color points by:",
+        choices = c("", colnames),
+        selected = ""
+      )
+    )
+  })
+  
   generate_systematic_map <- reactive(sys_map(data_active()))
   
   
@@ -297,34 +298,8 @@ shinyServer(function(input, output, session) {
     lat_plotted[is.na(lat_plotted)] <- 0
     lng_plotted[is.na(lng_plotted)] <- -20
     
-    if (input$atlas_color_by_select != "") {
-      color_user <- input$atlas_color_by_select
-      factpal <- colorFactor(RColorBrewer::brewer.pal(9, "Set1"),
-                             data_active()$color_user,
-                             reverse = TRUE)
-      colorby <- ~ factpal(data_active()[[color_user]])
-      
-      if (length(unique(data_active()[, color_user])) < 9) {
-        leafletProxy("map", data = data_active()) %>%
-          leaflet::removeControl("ref_data") %>%
-          leaflet::addLegend(
-            title = stringr::str_to_title(stringr::str_replace_all(color_user, "\\.", " ")),
-            position = "topright",
-            pal = factpal,
-            values = data_active()[, color_user],
-            layerId = "color_by_legend",
-            group = "legend",
-            na.label = "None",
-            opacity = .8
-          )
-      } else {
-        leafletProxy("map") %>%
-          leaflet::removeControl("color_by_legend")
-      }
-    } else {
-      colorby <- "blue"
-    }
-    
+
+
     # Refugee statistics
     ref_data_filtered <- reactive({
       FDPDataAtlas::ref_data %>%
