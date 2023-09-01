@@ -246,23 +246,6 @@ shinyServer(function(input, output, session) {
   
   
   # Data Atlas Tab
-
-    output$atlas_color_by <- renderUI({
-    req(data_internal$raw)
-    colnames <- FDPDataAtlas::metadata %>%
-      dplyr::select(!where(is.numeric)) %>%
-      colnames()
-    div(
-      title = "Select variable to color points by",
-      selectInput(
-        inputId = "atlas_color_by_select",
-        label = "Color points by:",
-        choices = c("", colnames),
-        selected = ""
-      )
-    )
-  })
-  
   generate_systematic_map <- reactive(sys_map(data_active()))
   
   
@@ -279,12 +262,25 @@ shinyServer(function(input, output, session) {
             }"
       )
   })
+
+    output$atlas_color_by <- renderUI({
+
+    div(
+      title = "Select variable to color points by",
+      selectInput(
+        inputId = "atlas_color_by_select",
+        label = "Color points by:",
+        choices = c("", colnames),
+        selected = ""
+      )
+    )
+  })
+
   
   # render map
   observe({
-    req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
     
-    # radiusby <- input$atlas_radius_select
+    req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
     
     lat_plotted <-
       as.numeric(unlist(data_active() %>%
@@ -306,21 +302,19 @@ shinyServer(function(input, output, session) {
         filter(indicator == input$selected_variable)
     })
     
-    breaks <-
-      quantile(ref_data_filtered()$value,
+    # COLOR
+    breaks <- quantile(ref_data_filtered()$value,
                probs = seq(0, 1, 0.25),
                na.rm = TRUE)
     breaks <- rev(breaks)
-    pal <-
-      colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
-    # Create a custom color palette function
+    pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
     custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
     circle_pal <-
       colorNumeric(palette = custom_pal(5),
                    domain = data_active()$total_of_country)
     
     
-    
+    # LABEL 
     polygon_labels <-
       sprintf("<h5>%s</h5>", ref_data_filtered()$NAME_EN) %>%
       lapply(htmltools::HTML)
