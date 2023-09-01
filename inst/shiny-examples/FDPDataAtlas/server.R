@@ -257,9 +257,6 @@ shinyServer(
     )
 
 
-    # Create a reactive value to store clicked country ISO_A3
-    clicked_ISO_A3 <- reactiveVal(NULL)
-
     output$map <- renderLeaflet({
       generate_systematic_map() %>%
         onRender(
@@ -273,11 +270,6 @@ shinyServer(
             }"
         )
     })
-
-    cluster_level <- reactive({
-      input$cluster_size_select
-    })
-
 
     observe({
       req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
@@ -345,6 +337,8 @@ shinyServer(
 
 
       # Observe click events
+  
+    clicked_ISO_A3 <- reactiveVal(NULL)
       observe({
         click <- input$map_shape_click
         if (is.null(click)) {
@@ -353,7 +347,7 @@ shinyServer(
         clicked_ISO_A3(click$id)
       })
 
-      # Display info in sidebar
+# Display info in sidebar
 output$country_info <- renderUI({
   if (is.null(clicked_ISO_A3())) {
     return(p("Select a country."))
@@ -405,8 +399,6 @@ output$country_info <- renderUI({
     return(HTML(text_to_display))
   }
 })
-
-
 
       leafletProxy("map", data = data_active()) %>%
         leaflet::clearMarkers() %>%
