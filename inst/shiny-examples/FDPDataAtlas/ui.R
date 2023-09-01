@@ -136,30 +136,6 @@ body <- dashboardBody(
                 5,
                 uiOutput("atlas_color_by"),
               )
-            ),
-            downloadButton(
-              outputId = "savemap_interactive",
-              label = "Save Map (Interactive)"
-            ),
-            downloadButton(
-              outputId = "savemap_png",
-              label = "Save Map (png)"
-            ),
-            downloadButton(
-              outputId = "savemap_pdf",
-              label = "Save Map (PDF)"
-            ),
-            bsTooltip("savemap_interactive",
-              title = "Save an interactive HTML version of the map using the current display settings. This HTML map can then be easily hosted on your own website",
-              placement = "bottom", trigger = "hover"
-            ),
-            bsTooltip("savemap_png",
-              title = "Save a static version of the map using the current display settings.",
-              placement = "bottom", trigger = "hover"
-            ),
-            bsTooltip("savemap_pdf",
-              title = "Save a static version of the map using the current display settings.",
-              placement = "bottom", trigger = "hover"
             )
           )
         )
