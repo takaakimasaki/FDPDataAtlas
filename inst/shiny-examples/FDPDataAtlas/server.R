@@ -437,26 +437,5 @@ output$country_info <- renderUI({
         )
     })
 
-    observeEvent(input$map_title_select, {
-      leafletProxy("map") %>%
-        leaflet::removeControl("atlas_title") %>%
-        leaflet::addControl(input$map_title_select,
-          position = "topleft",
-          className = "map-title",
-          layerId = "atlas_title"
-        )
-    })
-
-    observeEvent(input$map_basemap_select, {
-      leafletProxy("map") %>%
-        leaflet::removeTiles("atlas_basemap") %>%
-        leaflet::addProviderTiles(input$map_basemap_select,
-          group = input$map_basemap_select,
-          layerId = "atlas_basemap", options = providerTileOptions(noWrap = TRUE)
-        )
-    })
-
-
-
   }
 )
