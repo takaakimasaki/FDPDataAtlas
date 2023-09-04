@@ -263,7 +263,16 @@ shinyServer(function(input, output, session) {
       )
   })
 
-
+# Observe click events
+    clicked_ISO_A3 <- reactiveVal(NULL)
+    observe({
+      click <- input$map_shape_click
+      if (is.null(click)) {
+        return()
+      }
+      clicked_ISO_A3(click$id)
+    })
+    
   
   # render map
   observe({
@@ -306,20 +315,10 @@ shinyServer(function(input, output, session) {
       lapply(htmltools::HTML)
     
     
-    # Observe click events
-    clicked_ISO_A3 <- reactiveVal(NULL)
-    observe({
-      click <- input$map_shape_click
-      if (is.null(click)) {
-        return()
-      }
-      clicked_ISO_A3(click$id)
-    })
-    
     # Display info in sidebar
     output$country_info <- renderUI({
       if (is.null(clicked_ISO_A3())) {
-        return(p("Select a country."))
+        return(p(""))
       } else {
         filtered_data <- FDPDataAtlas::metadata %>%
           filter(nation_abbreviation == clicked_ISO_A3())

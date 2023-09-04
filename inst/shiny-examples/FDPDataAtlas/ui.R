@@ -117,25 +117,18 @@ body <- dashboardBody(
     tabItem(
       tabName = "home",
       fluidRow(
-  column(9, box(width = 12, home), style = "padding-right: 0px;"),
+  column(9, box(width = 12, home), style = "padding-right: 0px;"), # show map
   column(3, wellPanel(
-    tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),
-    uiOutput("country_info")), style = "padding-left: 0px;")
-),
-      fluidRow(
-        column(
-          width = 12,
-          wellPanel( 
             fluidRow(
               radioButtons(
                 inputId = "selected_variable",
-                label = "Select variable",
+                label = "Basemaps available",
                 choices = unique(FDPDataAtlas::ref_data$indicator)
               )
-            )
-          )
-        )
-      )
+            ),
+    tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),
+    uiOutput("country_info")), style = "padding-left: 0px;")
+)
     ),
     tabItem(
       tabName = "data",
