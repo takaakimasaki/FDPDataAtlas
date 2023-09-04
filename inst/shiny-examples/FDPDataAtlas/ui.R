@@ -131,10 +131,6 @@ body <- dashboardBody(
                 inputId = "selected_variable",
                 label = "Select variable",
                 choices = unique(FDPDataAtlas::ref_data$indicator)
-              ),
-              column(
-                5,
-                uiOutput("atlas_color_by"),
               )
             )
           )

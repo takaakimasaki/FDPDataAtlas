@@ -263,24 +263,10 @@ shinyServer(function(input, output, session) {
       )
   })
 
-    output$atlas_color_by <- renderUI({
-
-    div(
-      title = "Select variable to color points by",
-      selectInput(
-        inputId = "atlas_color_by_select",
-        label = "Color points by:",
-        choices = c("", colnames),
-        selected = ""
-      )
-    )
-  })
 
   
   # render map
   observe({
-    
-    req(!is.null(input$atlas_color_by_select)) # could be anything in the evidence atlas pane
     
     lat_plotted <-
       as.numeric(unlist(data_active() %>%
