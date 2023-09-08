@@ -225,57 +225,117 @@ shinyServer(function(input, output, session) {
   )
   
   
-  # Data Atlas Tab
+  ##### Data Atlas Tab
   generate_systematic_map <- reactive(sys_map(data_active()))
   
-  
-  output$map <- renderLeaflet({
-    generate_systematic_map() %>%
-      onRender(
-        "function(el, x) {
-            L.easyPrint({
-              sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-              filename: 'FDPDataAtlasMap',
-              exportOnly: true,
-              hideControlContainer: true
-            }).addTo(this);
-            }"
-      )
+  # Observe click events
+  clicked_ISO_A3 <- reactiveVal(NULL)
+  observe({
+    click <- input$map_shape_click
+    if (is.null(click)) {
+      return()
+    }
+    clicked_ISO_A3(click$id)
   })
+  
+  
+# # plot basemap
+#   observe({
+#     custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
+#     circle_pal <-
+#       colorNumeric(palette = custom_pal(5),
+#                    domain = data_active()$total_of_country)
+#     
+#     lat_plotted <-
+#     as.numeric(unlist(data_active() %>%
+#                         dplyr::select(Latitude)))
+#   lng_plotted <-
+#     as.numeric(unlist(data_active() %>%
+#                         dplyr::select(Longitude)))
+#   
+#   # replace missing lat/long with standard locations chosen by 'nonplotted' input
+#   # if(input$nonplotted == 'Not plotted'){
+#   lat_plotted[is.na(lat_plotted)] <- 0
+#   lng_plotted[is.na(lng_plotted)] <- -20
+#   
+#   output$map <- renderLeaflet({
+#     
+#     generate_systematic_map() %>%
+#       onRender(
+#         "function(el, x) {
+#             L.easyPrint({
+#               sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+#               filename: 'FDPDataAtlasMap',
+#               exportOnly: true,
+#               hideControlContainer: true
+#             }).addTo(this);
+#             }"
+#       ) %>%
+#       leaflet::addCircleMarkers(
+#         lat = ~ lat_plotted,
+#         lng = ~ lng_plotted,
+#         layerId = ~ nation_abbreviation,
+#         radius = 1 * data_active()$total_of_country,
+#         color = circle_pal(data_active()$total_of_country),
+#        #  color = "blue",
+#         stroke = FALSE,
+#         fillOpacity = 0.7
+#       ) 
+#   })
+#   })
+  
 
-# Observe click events
-    clicked_ISO_A3 <- reactiveVal(NULL)
-    observe({
-      click <- input$map_shape_click
-      if (is.null(click)) {
-        return()
-      }
-      clicked_ISO_A3(click$id)
-    })
-    
   
   # render map
   observe({
-    
-    lat_plotted <-
-      as.numeric(unlist(data_active() %>%
-                          dplyr::select(Latitude)))
-    lng_plotted <-
-      as.numeric(unlist(data_active() %>%
-                          dplyr::select(Longitude)))
-    
-    # replace missing lat/long with standard locations chosen by 'nonplotted' input
-    # if(input$nonplotted == 'Not plotted'){
-    lat_plotted[is.na(lat_plotted)] <- 0
-    lng_plotted[is.na(lng_plotted)] <- -20
-    
+        custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
+        circle_pal <-
+          colorNumeric(palette = custom_pal(5),
+                       domain = data_active()$total_of_country)
 
+        lat_plotted <-
+        as.numeric(unlist(data_active() %>%
+                            dplyr::select(Latitude)))
+      lng_plotted <-
+        as.numeric(unlist(data_active() %>%
+                            dplyr::select(Longitude)))
 
+    
+      lat_plotted[is.na(lat_plotted)] <- 0
+      lng_plotted[is.na(lng_plotted)] <- -20
+
+      output$map <- renderLeaflet({
+
+        generate_systematic_map() %>%
+          onRender(
+            "function(el, x) {
+                L.easyPrint({
+                  sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+                  filename: 'FDPDataAtlasMap',
+                  exportOnly: true,
+                  hideControlContainer: true
+                }).addTo(this);
+                }"
+          ) %>%
+          leaflet::addCircleMarkers(
+            lat = ~ lat_plotted,
+            lng = ~ lng_plotted,
+            layerId = ~ nation_abbreviation,
+            radius = 1 * data_active()$total_of_country,
+            color = circle_pal(data_active()$total_of_country),
+           #  color = "blue",
+            stroke = FALSE,
+            fillOpacity = 0.7
+          )
+})
     # Refugee statistics
-    ref_data_filtered <- reactive({
-      FDPDataAtlas::ref_data %>%
-        filter(indicator == input$selected_variable)
-    })
+      ref_data_filtered <- reactive({
+        req(input$selected_variable != "None")
+        print(input$selected_variable)
+        FDPDataAtlas::ref_data %>%
+          filter(indicator == input$selected_variable)
+      })
+      
     
     # COLOR
     breaks <- quantile(ref_data_filtered()$value,
@@ -283,10 +343,6 @@ shinyServer(function(input, output, session) {
                na.rm = TRUE)
     breaks <- rev(breaks)
     pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
-    custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
-    circle_pal <-
-      colorNumeric(palette = custom_pal(5),
-                   domain = data_active()$total_of_country)
     
     
     # LABEL 
@@ -378,15 +434,6 @@ shinyServer(function(input, output, session) {
         # set the transparency of the border (range: 0-1)
         label = polygon_labels
       ) %>%
-      leaflet::addCircleMarkers(
-        lat = ~ lat_plotted,
-        lng = ~ lng_plotted,
-        layerId = ~ nation_abbreviation,
-        radius = 1 * data_active()$total_of_country,
-        color = circle_pal(data_active()$total_of_country),
-        stroke = FALSE,
-        fillOpacity = 0.7
-      ) %>%
       leaflet::addLegend(
         pal = pal,
         values = ~ ref_data_filtered()$value,
@@ -394,6 +441,16 @@ shinyServer(function(input, output, session) {
         # set the transparency of the legend (range: 0-1)
         title = input$selected_variable,
         layerId = "ref_data"
+      ) %>%
+      leaflet::addCircleMarkers(
+        lat = ~ lat_plotted,
+        lng = ~ lng_plotted,
+        layerId = ~ nation_abbreviation,
+        radius = 1 * data_active()$total_of_country,
+        color = circle_pal(data_active()$total_of_country),
+        #  color = "blue",
+        stroke = FALSE,
+        fillOpacity = 0.7
       )
   })
   

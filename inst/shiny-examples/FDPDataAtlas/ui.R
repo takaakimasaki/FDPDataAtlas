@@ -120,10 +120,10 @@ body <- dashboardBody(
   column(9, box(width = 12, home), style = "padding-right: 0px;"), # show map
   column(3, wellPanel(
             fluidRow(
-              radioButtons(
+              selectInput(
                 inputId = "selected_variable",
                 label = "Basemaps available",
-                choices = unique(FDPDataAtlas::ref_data$indicator)
+                choices = c("None", unique(FDPDataAtlas::ref_data$indicator))
               )
             ),
     tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),
