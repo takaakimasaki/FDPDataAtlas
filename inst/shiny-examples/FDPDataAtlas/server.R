@@ -104,26 +104,6 @@ shinyServer(function(input, output, session) {
     ),
     server = F
   )
-  
-  
-  output$atlas_selectmap <- renderUI({
-    req(data_internal$raw)
-    div(
-      title = "You can change the default basemap to highlight different geographical features or change the language of map labels",
-      selectInput(
-        inputId = "map_basemap_select",
-        label = "Select Basemap",
-        choices = c(
-          "OpenStreetMap",
-          "OpenTopoMap",
-          "Stamen.TonerLite",
-          "Esri.WorldStreetMap"
-        ),
-        selected = "OpenStreetMap"
-      )
-    )
-  })
-  
  
   
   # Location Frequency Plot
