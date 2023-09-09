@@ -123,7 +123,8 @@ body <- dashboardBody(
               selectInput(
                 inputId = "selected_variable",
                 label = "Basemaps available",
-                choices = c("None", unique(FDPDataAtlas::ref_data$indicator))
+                choices = unique(FDPDataAtlas::ref_data$indicator),
+                selected = unique(FDPDataAtlas::ref_data$indicator)[1]
               )
             ),
     tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),

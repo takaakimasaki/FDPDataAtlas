@@ -241,13 +241,14 @@ shinyServer(function(input, output, session) {
   
 # Refugee statistics
       ref_data_filtered <- reactive({
-        req(input$selected_variable != "None")
         FDPDataAtlas::ref_data %>%
           filter(indicator == input$selected_variable)
       })
+
       
   # render map
   observe({
+    print(ref_data_filtered())
         custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
         circle_pal <-
           colorNumeric(palette = custom_pal(5),
@@ -264,28 +265,24 @@ shinyServer(function(input, output, session) {
       lat_plotted[is.na(lat_plotted)] <- 0
       lng_plotted[is.na(lng_plotted)] <- -20
 
+      tooltip_label <- reactive({
+        
+        sprintf("<h5>%s</h5>", ref_data_filtered()$NAME_EN) %>%
+          lapply(htmltools::HTML)
+        
+      })
+      
       output$map <- renderLeaflet({
-
-        generate_systematic_map() %>%
-          onRender(
-            "function(el, x) {
-                L.easyPrint({
-                  sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-                  filename: 'FDPDataAtlasMap',
-                  exportOnly: true,
-                  hideControlContainer: true
-                }).addTo(this);
-                }"
-          ) %>%
+        generate_systematic_map()  %>%
           leaflet::addCircleMarkers(
             lat = ~ lat_plotted,
             lng = ~ lng_plotted,
             layerId = ~ nation_abbreviation,
             radius = 1 * data_active()$total_of_country,
             color = circle_pal(data_active()$total_of_country),
-           #  color = "blue",
             stroke = FALSE,
-            fillOpacity = 0.7
+            fillOpacity = 0.7,
+            #label = tooltip_label
           )
 })
     
@@ -295,14 +292,7 @@ shinyServer(function(input, output, session) {
                na.rm = TRUE)
     breaks <- rev(breaks)
     pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
-    
-    
-    # LABEL 
-    polygon_labels <-
-      sprintf("<h5>%s</h5>", ref_data_filtered()$NAME_EN) %>%
-      lapply(htmltools::HTML)
-    
-    
+  
     # Display info in sidebar
     output$country_info <- renderUI({
       if (is.null(clicked_ISO_A3())) {
@@ -377,20 +367,15 @@ shinyServer(function(input, output, session) {
         layerId = ~ ISO_A3,
         fillColor = ~ pal(ref_data_filtered()$value),
         color = "white",
-        # set the border color (e.g., black, blue, etc)
         dashArray = "3",
-        # set the dash of the border (e.g., 1,2,3, etc)
         weight = 1,
-        # set the thickness of the border (e.g., 1,2,3, etc)
         fillOpacity = 0.7,
-        # set the transparency of the border (range: 0-1)
-        label = polygon_labels
+        # label = tooltip_label
       ) %>%
       leaflet::addLegend(
         pal = pal,
         values = ~ ref_data_filtered()$value,
         opacity = 0.7,
-        # set the transparency of the legend (range: 0-1)
         title = input$selected_variable,
         layerId = "ref_data"
       ) %>%
