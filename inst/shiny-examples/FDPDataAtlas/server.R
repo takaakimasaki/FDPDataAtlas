@@ -266,11 +266,11 @@ shinyServer(function(input, output, session) {
       lng_plotted[is.na(lng_plotted)] <- -20
 
       tooltip_label <- reactive({
-        
-        sprintf("<h5>%s</h5>", ref_data_filtered()$NAME_EN) %>%
-          lapply(htmltools::HTML)
+        print("OI")
         
       })
+      
+      # print(colnames(data_active()))
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
@@ -282,7 +282,7 @@ shinyServer(function(input, output, session) {
             color = circle_pal(data_active()$total_of_country),
             stroke = FALSE,
             fillOpacity = 0.7,
-            #label = tooltip_label
+            label = data_active()$nation_abbreviation
           )
 })
     
@@ -370,7 +370,7 @@ shinyServer(function(input, output, session) {
         dashArray = "3",
         weight = 1,
         fillOpacity = 0.7,
-        # label = tooltip_label
+        label = data_active()$nation_abbreviation
       ) %>%
       leaflet::addLegend(
         pal = pal,
@@ -387,7 +387,8 @@ shinyServer(function(input, output, session) {
         color = circle_pal(data_active()$total_of_country),
         #  color = "blue",
         stroke = FALSE,
-        fillOpacity = 0.7
+        fillOpacity = 0.7,
+        label = data_active()$nation_abbreviation
       )
   })
   
