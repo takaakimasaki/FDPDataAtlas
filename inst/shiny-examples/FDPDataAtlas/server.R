@@ -305,7 +305,7 @@ shinyServer(function(input, output, session) {
     # Display info in sidebar
     output$country_info <- renderUI({
       if (is.null(clicked_ISO_A3())) {
-        return(p("Click on a country to see the surveys available"))
+        return(p("Click on a country to check the surveys available."))
       } else {
         filtered_data <- FDPDataAtlas::metadata %>%
           filter(nation_abbreviation == clicked_ISO_A3())
