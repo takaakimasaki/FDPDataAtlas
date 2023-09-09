@@ -224,6 +224,7 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  ##############################################################################################################
   
   ##### Data Atlas Tab
   generate_systematic_map <- reactive(sys_map(data_active()))
@@ -238,54 +239,13 @@ shinyServer(function(input, output, session) {
     clicked_ISO_A3(click$id)
   })
   
-  
-# # plot basemap
-#   observe({
-#     custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
-#     circle_pal <-
-#       colorNumeric(palette = custom_pal(5),
-#                    domain = data_active()$total_of_country)
-#     
-#     lat_plotted <-
-#     as.numeric(unlist(data_active() %>%
-#                         dplyr::select(Latitude)))
-#   lng_plotted <-
-#     as.numeric(unlist(data_active() %>%
-#                         dplyr::select(Longitude)))
-#   
-#   # replace missing lat/long with standard locations chosen by 'nonplotted' input
-#   # if(input$nonplotted == 'Not plotted'){
-#   lat_plotted[is.na(lat_plotted)] <- 0
-#   lng_plotted[is.na(lng_plotted)] <- -20
-#   
-#   output$map <- renderLeaflet({
-#     
-#     generate_systematic_map() %>%
-#       onRender(
-#         "function(el, x) {
-#             L.easyPrint({
-#               sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-#               filename: 'FDPDataAtlasMap',
-#               exportOnly: true,
-#               hideControlContainer: true
-#             }).addTo(this);
-#             }"
-#       ) %>%
-#       leaflet::addCircleMarkers(
-#         lat = ~ lat_plotted,
-#         lng = ~ lng_plotted,
-#         layerId = ~ nation_abbreviation,
-#         radius = 1 * data_active()$total_of_country,
-#         color = circle_pal(data_active()$total_of_country),
-#        #  color = "blue",
-#         stroke = FALSE,
-#         fillOpacity = 0.7
-#       ) 
-#   })
-#   })
-  
-
-  
+# Refugee statistics
+      ref_data_filtered <- reactive({
+        req(input$selected_variable != "None")
+        FDPDataAtlas::ref_data %>%
+          filter(indicator == input$selected_variable)
+      })
+      
   # render map
   observe({
         custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
@@ -328,14 +288,6 @@ shinyServer(function(input, output, session) {
             fillOpacity = 0.7
           )
 })
-    # Refugee statistics
-      ref_data_filtered <- reactive({
-        req(input$selected_variable != "None")
-        print(input$selected_variable)
-        FDPDataAtlas::ref_data %>%
-          filter(indicator == input$selected_variable)
-      })
-      
     
     # COLOR
     breaks <- quantile(ref_data_filtered()$value,
