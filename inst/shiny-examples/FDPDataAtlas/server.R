@@ -248,7 +248,6 @@ shinyServer(function(input, output, session) {
       
   # render map
   observe({
-    print(ref_data_filtered())
         custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
         circle_pal <-
           colorNumeric(palette = custom_pal(5),
@@ -274,6 +273,16 @@ shinyServer(function(input, output, session) {
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
+          leaflet::addPolygons(
+            data = FDPDataAtlas::bounds,
+            layerId = ~ ISO_A3,
+            fillColor = ~ pal(ref_data_filtered()$value),
+            color = "white",
+            dashArray = "3",
+            weight = 1,
+            fillOpacity = 0.7,
+            # label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
+          ) %>%
           leaflet::addCircleMarkers(
             lat = ~ lat_plotted,
             lng = ~ lng_plotted,
@@ -282,7 +291,7 @@ shinyServer(function(input, output, session) {
             color = circle_pal(data_active()$total_of_country),
             stroke = FALSE,
             fillOpacity = 0.7,
-            label = data_active()$nation_abbreviation
+            label = sprintf("%s: %d surveys",data_active()$nation_abbreviation, data_active()$total_of_country)
           )
 })
     
@@ -370,7 +379,7 @@ shinyServer(function(input, output, session) {
         dashArray = "3",
         weight = 1,
         fillOpacity = 0.7,
-        label = data_active()$nation_abbreviation
+        # label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
       ) %>%
       leaflet::addLegend(
         pal = pal,
@@ -388,7 +397,7 @@ shinyServer(function(input, output, session) {
         #  color = "blue",
         stroke = FALSE,
         fillOpacity = 0.7,
-        label = data_active()$nation_abbreviation
+        label = sprintf("%s: %d surveys",data_active()$nation_abbreviation, data_active()$total_of_country)
       )
   })
   
