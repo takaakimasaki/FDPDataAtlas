@@ -5,7 +5,6 @@ library(FDPDataAtlas)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-library(plotly)
 library(tidyr)
 library(readr)
 library(DT)
@@ -67,7 +66,7 @@ shinyServer(function(input, output, session) {
   # outline of what the dataset contains
   output$data_summary <- renderTable({
     if (!is.null(data_internal$raw)) {
-      datadict <- read.csv("../../../data/datadictionary.csv")
+      datadict <- FDPDataAtlas::datadictionary
       return(datadict)
     }
   })
@@ -145,178 +144,6 @@ shinyServer(function(input, output, session) {
           selected = ""
         )
       )
-
-    })
-
-
-    # observeEvent(input$map_filtered_select, {
-    #   # Change values for map inputs whenever button is toggled
-    #   updateSelectInput(
-    #     session,
-    #     "map_lat_select",
-    #     choices = colnames(data_active()),
-    #     selected = get_latitude_cols(data_active())
-    #   )
-    #
-    #   updateSelectInput(
-    #     session,
-    #     "map_lng_select",
-    #     choices = colnames(data_active()),
-    #     selected = get_longitude_cols(data_active())
-    #   )
-    #
-    #   updateSelectInput(session, "map_link_select",
-    #                     choices = c("", get_link_cols(data_active()) )
-    #                     )
-    #
-    #   updateSelectInput(session, "map_popup_select",
-    #     choices = colnames(data_active()),
-    #     selected = colnames(data_active())[1]
-    #     )
-    # })
-
-    # Location Frequency Plot
-    output$location_plot_selector <- renderUI({
-      req(data_internal$raw)
-
-      selectInput(
-        inputId = "select_loc_col",
-        label = "Plot the number of datasets by:",
-        choices = c("", get_histogram_viable_columns(data_active())),
-        selected = "nation_abbreviation"
-      )
-    })
-
-    ## HEATMAP
-    output$heatmap_selector <- renderUI({
-      req(data_internal$raw)
-      div(
-        list(
-          div(
-            style = "display: inline-block; width = '10%'",
-            br()
-          ),
-          div(
-            style = "display: inline-block; width = '40%'",
-            title = "Select which categorical variable you wish to cross tabulate along the x axis in a heat map. Values must be discrete categories (i.e. not free text and not decimal)",
-            selectInput(
-              inputId = "heat_select_x",
-              label = "Select X variable",
-              choices = c("", get_histogram_viable_columns(data_active())),
-              selected = ""
-            )
-          ),
-          div(
-            style = "display: inline-block; width = '40%'",
-            title = "Select which categorical variable you wish to cross tabulate along the y axis in a heat map. Values must be discrete categories (i.e. not free text and not decimal)",
-            selectInput(
-              inputId = "heat_select_y",
-              label = "Select Y variable",
-              choices = c("", get_histogram_viable_columns(data_active())),
-              selected = ""
-            )
-          )
-        )
-      )
-    })
-
-    #geom_bar rather than geom_histogram so that non-continous variables can be plotted
-    source("gendescplot.R")
-    gen_location_trend_plot <- reactive({
-      GenDescPlots(data_active(), input$select_loc_col)
-    })
-
-    output$plot2 <- renderPlotly({
-      req(input$select_loc_col)
-      gen_location_trend_plot()
-    })
-
-    output$save_plot_1 <- downloadHandler(
-      filename = 'FDPDataAtlas1.png',
-      content = function(file) {
-        device <- function(..., width, height) {
-          grDevices::png(..., width = width, height = height,
-                         res = 300, units = "in")
-        }
-        ggsave(file, plot = gen_time_trend_plot(), device = device)
-      }
-    )
-
-    gen_heatmap <- reactive({
-      GenHeatMap(data_active(), c(input$heat_select_x, input$heat_select_y))
-    })
-
-    output$heatmap <- renderPlot({
-      req(input$heat_select_x)
-      req(input$heat_select_y)
-      gen_heatmap()
-    })
-
-    output$heat_x_axis <- renderPrint({ input$heat_select_x })
-    output$heat_y_axis <- renderPrint({ input$heat_select_y })
-
-    # observeEvent(input$map_filter_select, {
-    #   updateMaterialSwitch(session = session, inputId = "heatmap_filtered_select",
-    #                      value = as.logical(input$map_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "barplots_filtered_select",
-    #                      value = as.logical(input$map_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "mapdatabase_filter_select",
-    #                        value = as.logical(input$map_filter_select))
-    # })
-    #
-    # observeEvent(input$heatmap_filter_select, {
-    #   updateMaterialSwitch(session = session, inputId = "map_filtered_select",
-    #                      value = as.logical(input$heatmap_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "barplots_filtered_select",
-    #                      value = as.logical(input$heatmap_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "mapdatabase_filter_select",
-    #                        value = as.logical(input$heatmap_filter_select))
-    # })
-    #
-    # observeEvent(input$barplots_filter_select, {
-    #   updateMaterialSwitch(session = session, inputId = "map_filtered_select",
-    #                        value = as.logical(input$barplots_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "heatmap_filter_select",
-    #                        value = as.logical(input$barplots_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "mapdatabase_filter_select",
-    #                        value = as.logical(input$barplots_filter_select))
-    # })
-    #
-    # observeEvent(input$mapdatabase_filter_select, {
-    #   updateMaterialSwitch(session = session, inputId = "map_filtered_select",
-    #                        value = as.logical(input$mapdatabase_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "heatmap_filter_select",
-    #                        value = as.logical(input$mapdatabase_filter_select))
-    #   updateMaterialSwitch(session = session, inputId = "barplots_filter_select",
-    #                        value = as.logical(input$mapdatabase_filter_select))
-    # })
-
-    output$save_heatmap <- downloadHandler(
-      filename = 'FDPDataAtlasHeatmap.png',
-      content = function(file) {
-        device <- function(..., width, height) {
-          grDevices::png(..., width = width, height = width,
-                         res = 300, units = "in")
-        }
-        ggsave(file, plot = gen_heatmap(), device = device)
-      }
-    )
-
-    generate_systematic_map <- reactive(
-        sys_map(data_active() )
-    )
-
-    output$map <- renderLeaflet({
-      generate_systematic_map() %>%
-        onRender(
-          "function(el, x) {
-            L.easyPrint({
-              sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-              filename: 'FDPDataAtlasMap',
-              exportOnly: true,
-              hideControlContainer: true
-            }).addTo(this);
-            }"
     ))
   })
   
@@ -357,7 +184,6 @@ shinyServer(function(input, output, session) {
           height = height,
           res = 300,
           units = "in"
-
         )
       }
       ggsave(file, plot = gen_location_trend_plot(), device = device)

@@ -2,7 +2,6 @@
 library(dplyr)
 library(stringr)
 library(ggplot2)
-library(plotly)
 library(tidyr)
 library(DT)
 library(leaflet)
@@ -141,35 +140,6 @@ body <- dashboardBody(
         )
       )
     ),
-
-    tabItem(tabName = "insightplots",
-        fluidRow(
-          column(12, uiOutput("location_plot_selector"))  # Full width
-        ),
-        wellPanel(
-          plotlyOutput("plot2", width = "100%", height = "75vh")
-        )
-)
-
-,
-    tabItem(tabName = "heatmap",
-            fluidRow(
-              uiOutput("heatmap_selector")),
-            fluidRow(
-              #   materialSwitch(
-              #   inputId = "heatmap_filter_select",
-              #   label = "Use filtered data:",
-              #   value = FALSE,
-              #   status = "primary"
-              # )
-            ),
-            fluidRow(
-              wellPanel(
-                plotOutput("heatmap", width = "100%", height = "75vh"),
-                downloadButton("save_heatmap")
-              )
-            )
-
     tabItem(
       tabName = "insightplots",
       tabsetPanel(
@@ -196,7 +166,6 @@ body <- dashboardBody(
           downloadButton("save_heatmap")
         )
       )
-
     ),
     tabItem(
       tabName = "resources",
