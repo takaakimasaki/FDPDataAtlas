@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 conflictRules("tidyr", mask.ok = c("extract"))
 conflictRules("dplyr", mask.ok = c("filter", "lag", "select"))
-pacman::p_load(devtools,dplyr,tidyverse,sf,here)
+pacman::p_load(devtools,dplyr,tidyverse,sf,here, devtools)
 ```
 If any update has been made in the metadata, run this chunk. 
 ```{r, echo=FALSE, eval=FALSE}
@@ -43,22 +43,22 @@ bounds$geom_valid <- st_is_valid(bounds)
 bounds <- bounds %>% 
   filter(geom_valid=="TRUE") 
 
+##relabel some of the indicators 
+ref_data <- ref_data %>%
+  mutate(indicator=ifelse(indicator=="Refugee population by country or territory of asylum (2021) (WDI)","Refugee population by country or territory of asylum (2021) (UNHCR Refugee Data Finder)",indicator)) %>%
+   mutate(indicator=ifelse(indicator=="Refugee population by country or territory of origin (2021) (WDI)","Refugee population by country or territory of origin (2021) (UNHCR Refugee Data Finder)", indicator)) 
+table(ref_data$indicator)
 
 ##read data dictionary
 datadictionary <- read_csv(here::here("inst","extdata","datadictionary.csv"))
 
 usethis::use_data(metadata, bounds, ref_data, datadictionary, overwrite=TRUE)
 ```
-if any update has been made to the package, run this chunk.
+if any update has been made to the package, run this chunk and test.
 ```{r, echo=FALSE, eval=FALSE}
 library(devtools)
 document()
-install()
-```
-
-Run app. 
-```{r}
-library(FDPDataAtlas)
+load_all()
 runShiny()
 ```
 

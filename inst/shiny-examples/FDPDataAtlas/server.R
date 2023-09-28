@@ -21,6 +21,7 @@ library(shinydashboard)
 library(shinyWidgets)
 library(shinyBS)
 library(RColorBrewer)
+library(leaflet.providers)
 
 if (webshot::is_phantomjs_installed() == FALSE) {
   webshot::install_phantomjs()
@@ -273,7 +274,8 @@ shinyServer(function(input, output, session) {
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
-          leaflet::addPolygons(
+          addProviderTiles(providers$Esri.WorldTerrain) %>%
+        leaflet::addPolygons(
             data = FDPDataAtlas::bounds,
             layerId = ~ ISO_A3,
             fillColor = ~ pal(ref_data_filtered()$value),
@@ -281,7 +283,7 @@ shinyServer(function(input, output, session) {
             dashArray = "3",
             weight = 1,
             fillOpacity = 0.7,
-            # label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
+            #label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
           ) %>%
           leaflet::addCircleMarkers(
             lat = ~ lat_plotted,
@@ -292,7 +294,12 @@ shinyServer(function(input, output, session) {
             stroke = FALSE,
             fillOpacity = 0.7,
             label = sprintf("%s: %d surveys",data_active()$nation_abbreviation, data_active()$total_of_country)
-          )
+          ) %>%
+          leaflet::addLabelOnlyMarkers(lat = ~ lat_plotted,
+                              lng = ~ lng_plotted,
+                              label = sprintf("%d",data_active()$total_of_country), 
+                              labelOptions = labelOptions(noHide = T, direction = 'center', textOnly = T)
+                              )
 })
     
     # COLOR
@@ -398,6 +405,11 @@ shinyServer(function(input, output, session) {
         stroke = FALSE,
         fillOpacity = 0.7,
         label = sprintf("%s: %d surveys",data_active()$nation_abbreviation, data_active()$total_of_country)
+      )%>%
+      leaflet::addLabelOnlyMarkers(lat = ~ lat_plotted,
+                                   lng = ~ lng_plotted,
+                                   label = sprintf("%d",data_active()$total_of_country), 
+                                   labelOptions = labelOptions(noHide = T, direction = 'center', textOnly = T)
       )
   })
   
