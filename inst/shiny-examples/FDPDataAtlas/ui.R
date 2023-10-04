@@ -86,17 +86,17 @@ body <- dashboardBody(
                     background-color: #dbf0ee;
                     }
                     .skin-blue .main-header .logo {
-                    background-color: #4FB3A9;
+                    background-color: #009FDA;
                     color: #ffffff;
                     }
                     .skin-blue .main-header .logo:hover {
-                    background-color: #2d6c66;
+                    background-color: #0072BC;
                     }
                     .skin-blue .main-header .navbar {
-                    background-color: #4FB3A9;
+                    background-color: #009FDA;
                     }
                     .skin-blue .main-header .sidebar-toggle {
-                    background-color: #2d6c66;
+                    background-color: #0072BC;
                     }
                     ")),
   tabItems(

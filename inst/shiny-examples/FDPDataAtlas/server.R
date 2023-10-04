@@ -249,7 +249,7 @@ shinyServer(function(input, output, session) {
       
   # render map
   observe({
-        custom_pal <- colorRampPalette(c("lightblue", "#4747ff"))
+        custom_pal <- colorRampPalette(c("#CFFFF2", "#027B68"))
         circle_pal <-
           colorNumeric(palette = custom_pal(5),
                        domain = data_active()$total_of_country)
@@ -307,7 +307,9 @@ shinyServer(function(input, output, session) {
                probs = seq(0, 1, 0.25),
                na.rm = TRUE)
     breaks <- rev(breaks)
-    pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
+    navy_colors <- c("#E0E9FE", "#B8C9EE", "#8395B9", "#506489", "#18375F")
+    pal <- colorBin(navy_colors, domain = ref_data_filtered()$value, bins = breaks)
+    #pal <- colorBin("Reds", domain = ref_data_filtered()$value, bins = breaks)
   
     # Display info in sidebar
     output$country_info <- renderUI({
