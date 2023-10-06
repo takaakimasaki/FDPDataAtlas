@@ -25,12 +25,12 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
   
   # Get max value
   max_val <- max(location_counts[[colnames(location_counts[2])]])
-
+  
   # Attach tooltip text to your data frame
   location_counts$tooltip_text <- paste(location_counts[[location_column]], ":",
-                                       location_counts$n)
+                                        location_counts$n)
   
-
+  
   # Plot bar chart
   locmp <- ggplot2::ggplot(location_counts, 
                            aes_string(x=colnames(location_counts[2]),

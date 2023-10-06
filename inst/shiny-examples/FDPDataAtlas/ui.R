@@ -11,6 +11,7 @@ library(htmlwidgets)
 library(mapview)
 library(leafem)
 library(sf)
+library(plotly)
 library(viridis)
 library(shiny)
 library(shinydashboard)
@@ -140,31 +141,36 @@ body <- dashboardBody(
         )
       )
     ),
-    tabItem(
-      tabName = "insightplots",
-      tabsetPanel(
-        tabPanel(
-          "Plot Inputs",
-          fluidRow(
-            column(4, uiOutput("location_plot_selector"))
-          )
+tabItem(tabName = "insightplots",
+        fluidRow(
+          column(12, uiOutput("location_plot_selector"))  # Full width
+        ),
+        wellPanel(
+          plotlyOutput("plot2", width = "100%", height = "75vh")
         )
-      ),
-      wellPanel(
-        plotOutput("plot2"),
-        downloadButton("save_plot_2")
-      )
-    ),
+),
+    # tabItem(
+    #   tabName = "insightplots",
+    #   tabsetPanel(
+    #     fluidRow(
+    #       column(12, uiOutput("location_plot_selector"))  # Full width
+    #     ),
+    #     wellPanel(
+    #       plotlyOutput("plot2", width = "100%", height = "75vh")
+    #     )
+    #   ),
+    #   wellPanel(
+    #     plotOutput("plot2"),
+    #     downloadButton("save_plot_2")
+    #   )
+    # ),
     tabItem(
       tabName = "heatmap",
       fluidRow(
         uiOutput("heatmap_selector")
       ),
       fluidRow(
-        wellPanel(
-          plotOutput("heatmap", width = "100%", height = "75vh"),
-          downloadButton("save_heatmap")
-        )
+          plotlyOutput("heatmap", width = "100%", height = "75vh")
       )
     ),
     tabItem(

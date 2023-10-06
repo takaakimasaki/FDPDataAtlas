@@ -8,6 +8,7 @@ library(ggplot2)
 library(tidyr)
 library(readr)
 library(DT)
+library(plotly)
 library(leaflet)
 library(leaflet.providers)
 library(htmltools)
@@ -115,7 +116,7 @@ shinyServer(function(input, output, session) {
       inputId = "select_loc_col",
       label = "Plot the number of datasets by:",
       choices = c("", get_histogram_viable_columns(data_active())),
-      selected = ""
+      selected = "nation_name"
     )
   })
   
@@ -132,7 +133,7 @@ shinyServer(function(input, output, session) {
           inputId = "heat_select_x",
           label = "Select X variable",
           choices = c("", get_histogram_viable_columns(data_active())),
-          selected = ""
+          selected = "nation_abbreviation",
         )
       ),
       div(
@@ -142,61 +143,61 @@ shinyServer(function(input, output, session) {
           inputId = "heat_select_y",
           label = "Select Y variable",
           choices = c("", get_histogram_viable_columns(data_active())),
-          selected = ""
+          selected = "year"
         )
       )
     ))
   })
   
   # geom_bar rather than geom_histogram so that non-continous variables can be plotted
-  
+  source("gendescplot.R")
   gen_location_trend_plot <- reactive({
-    GenLocationTrend(data_active(), input$select_loc_col)
+    GenDescPlots(data_active(), input$select_loc_col)
   })
   
-  output$plot2 <- renderPlot({
+  output$plot2 <- renderPlotly({
     req(input$select_loc_col)
     gen_location_trend_plot()
   })
   
-  output$save_plot_1 <- downloadHandler(
-    filename = "FDPDataAtlas1.png",
-    content = function(file) {
-      device <- function(..., width, height) {
-        grDevices::png(
-          ...,
-          width = width,
-          height = height,
-          res = 300,
-          units = "in"
-        )
-      }
-      ggsave(file, plot = gen_time_trend_plot(), device = device)
-    }
-  )
-  
-  output$save_plot_2 <- downloadHandler(
-    filename = "FDPDataAtlas2.png",
-    content = function(file) {
-      device <- function(..., width, height) {
-        grDevices::png(
-          ...,
-          width = width,
-          height = height,
-          res = 300,
-          units = "in"
-        )
-      }
-      ggsave(file, plot = gen_location_trend_plot(), device = device)
-    }
-  )
+  # output$save_plot_1 <- downloadHandler(
+  #   filename = "FDPDataAtlas1.png",
+  #   content = function(file) {
+  #     device <- function(..., width, height) {
+  #       grDevices::png(
+  #         ...,
+  #         width = width,
+  #         height = height,
+  #         res = 300,
+  #         units = "in"
+  #       )
+  #     }
+  #     ggsave(file, plot = gen_time_trend_plot(), device = device)
+  #   }
+  # )
+  # 
+  # output$save_plot_2 <- downloadHandler(
+  #   filename = "FDPDataAtlas2.png",
+  #   content = function(file) {
+  #     device <- function(..., width, height) {
+  #       grDevices::png(
+  #         ...,
+  #         width = width,
+  #         height = height,
+  #         res = 300,
+  #         units = "in"
+  #       )
+  #     }
+  #     ggsave(file, plot = gen_location_trend_plot(), device = device)
+  #   }
+  # )
   
   gen_heatmap <- reactive({
     GenHeatMap(data_active(),
                c(input$heat_select_x, input$heat_select_y))
   })
   
-  output$heatmap <- renderPlot({
+  output$heatmap <- renderPlotly({
     req(input$heat_select_x)
     req(input$heat_select_y)
     gen_heatmap()
