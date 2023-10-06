@@ -145,9 +145,7 @@ tabItem(tabName = "insightplots",
         fluidRow(
           column(12, uiOutput("location_plot_selector"))  # Full width
         ),
-        wellPanel(
           plotlyOutput("plot2", width = "100%", height = "75vh")
-        )
 ),
     tabItem(
       tabName = "heatmap",

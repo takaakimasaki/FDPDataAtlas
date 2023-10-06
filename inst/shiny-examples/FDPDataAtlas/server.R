@@ -33,7 +33,8 @@ get_histogram_viable_columns <- function(df) {
              dplyr::select_if(function(x) dplyr::n_distinct(x) < 45))
   
   
-  list_toremove <- c("idp","Longitude", "Latitude")
+  list_toremove <-  c("method_data_collectors_name", "entity contact" , "disclaimer", 
+                      "project_specific", "total_of_country","idp", "Longitude", "Latitude") 
   
   final_list <- setdiff(list_cols, list_toremove)
   
