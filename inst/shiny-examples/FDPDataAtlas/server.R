@@ -96,7 +96,6 @@ shinyServer(function(input, output, session) {
       extensions = "Buttons",
       filter = "top",
       # caption = "Use the boxes below column headers to filter data",
-      # class = c('display', 'compact'),
       style = "bootstrap",
       options = list(
         scrollX = TRUE,
@@ -104,8 +103,9 @@ shinyServer(function(input, output, session) {
         pageLength = 10,
         autoWidth = FALSE,
         responsive = T,
-        dom = "Blfrtip",
-        buttons = c("copy", "csv", "excel", "pdf", "print"),
+        dom = "<'row'<'col-sm-1'f>><'row'<'col-sm-6'B>>rtlip",
+        # dom = "<'row'<'col-sm-6'f><'col-sm-6'B>><'row'<'col-sm-6'l><'col-sm-6'>>prti",
+        buttons = c("copy", "csv", "excel", "print"),
         columnDefs = list(list(
           targets = "_all",
           render = JS(
