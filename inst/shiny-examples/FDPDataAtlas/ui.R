@@ -149,21 +149,6 @@ tabItem(tabName = "insightplots",
           plotlyOutput("plot2", width = "100%", height = "75vh")
         )
 ),
-    # tabItem(
-    #   tabName = "insightplots",
-    #   tabsetPanel(
-    #     fluidRow(
-    #       column(12, uiOutput("location_plot_selector"))  # Full width
-    #     ),
-    #     wellPanel(
-    #       plotlyOutput("plot2", width = "100%", height = "75vh")
-    #     )
-    #   ),
-    #   wellPanel(
-    #     plotOutput("plot2"),
-    #     downloadButton("save_plot_2")
-    #   )
-    # ),
     tabItem(
       tabName = "heatmap",
       fluidRow(
