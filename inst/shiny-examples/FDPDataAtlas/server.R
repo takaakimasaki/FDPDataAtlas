@@ -28,6 +28,20 @@ if (webshot::is_phantomjs_installed() == FALSE) {
   webshot::install_phantomjs()
 }
 
+get_histogram_viable_columns <- function(df) {
+  list_cols <- colnames(df %>%
+             dplyr::select_if(function(x) dplyr::n_distinct(x) < 45))
+  
+  
+  list_toremove <- c("idp","Longitude", "Latitude")
+  
+  final_list <- setdiff(list_cols, list_toremove)
+  
+  return(final_list)
+  
+}
+
+
 start_text <- read_file("www/AboutEvi.html")
 
 max_file_size_mb <- 100
