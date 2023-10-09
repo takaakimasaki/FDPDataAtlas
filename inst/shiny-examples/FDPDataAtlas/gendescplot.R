@@ -37,7 +37,7 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
                                       y=colnames(location_counts[1]),
                                       text = "tooltip_text",
                                       label = colnames(location_counts[2]))) +
-    ggplot2::geom_bar(stat="identity", fill="light green", width=0.8) + 
+    ggplot2::geom_bar(stat="identity", fill="#0072BC", width=0.8) + 
     ggplot2::scale_x_continuous(limits = c(0, max_val * 1.05), expand = c(0, 0)) +
     ggplot2::scale_y_discrete(labels = function(y) {
       ifelse(nchar(y) > axis_txt_lim, 
@@ -48,17 +48,22 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
     ggplot2::labs(x="# Studies", 
                   y="", 
                   title = paste(location_column, "frequency")) +
-    ggplot2::theme_bw() +
+    theme_unhcr(grid="N") + 
     ggplot2::theme(
-      axis.line = element_line(colour = "black"),
-      panel.background = element_blank(),
-      plot.title = element_text(hjust = 0.5, size = 20),
-      axis.title.x = element_text(size = 18),
-      axis.title.y = element_text(size = 18),
-      axis.text.x = element_text(size = 14),
-      axis.text.y = element_text(size = 14),
-      # plot.margin = margin(20, 20, 20, 20) # Add margins
+      axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 5, r = 0, b = 0, l = 0)), 
     )
+    # ggplot2::theme_bw() +
+    # 
+    # ggplot2::theme(
+    #   axis.line = element_line(colour = "black"),
+    #   panel.background = element_blank(),
+    #   plot.title = element_text(hjust = 0.5, size = 20),
+    #   axis.title.x = element_text(size = 18),
+    #   axis.title.y = element_text(size = 18),
+    #   axis.text.x = element_text(size = 14),
+    #   axis.text.y = element_text(size = 14),
+    #   # plot.margin = margin(20, 20, 20, 20) # Add margins
+    # )
   
   # Rotate x-axis label if too many
   if (nrow(location_counts) > 5){

@@ -5,6 +5,7 @@ library(FDPDataAtlas)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(unhcrthemes)
 library(tidyr)
 library(readr)
 library(DT)
@@ -26,6 +27,50 @@ library(leaflet.providers)
 
 if (webshot::is_phantomjs_installed() == FALSE) {
   webshot::install_phantomjs()
+}
+
+
+GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
+  
+  listone<-listtwo<-n<-NULL
+  
+  # if  df is a shapefile, remove geometry column
+  if (any(class(idata) == 'sf')) {idata <- sf::st_drop_geometry(idata)}
+  
+  
+  # Convert columns to factors to allow for categorical classification for both numeric and character data -------
+  tmp <- as.data.frame(sapply(idata[selcols], function(x) as.factor(x)))
+  
+  
+  # Plot Heatmap ------
+  heatmp <- tmp %>%
+    dplyr::rename(listone=colnames(tmp[1]), listtwo=colnames(tmp[2]))%>%
+    dplyr::count(listone, listtwo) %>%
+    tidyr::complete(listone, listtwo, fill = list(n = 0)) %>%
+    dplyr::mutate(listtwo = forcats::fct_rev(forcats::fct_inorder(listtwo))) %>%  # Sort listtwo in reverse alphabetical order
+    ggplot2::ggplot(aes(x = listone, y = listtwo, fill= n, label= n)) +
+    ggplot2::geom_tile(aes(alpha = 0.3), color="grey60") +
+    ggplot2::geom_text() +
+    ggplot2::scale_fill_gradientn(colors = c("white", "#0072BC")) +
+    theme_unhcr(grid="N")    + 
+    # 
+    # + ggplot2::theme(
+    #   axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 10, r = 0, b = 0, l = 0)), 
+    #   axis.title.y = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 0, r = 10, b = 0, l = 0))  
+    # )
+    ggplot2::xlab(paste0(selcols[1])) +
+    ggplot2::ylab(paste0(selcols[2])) +
+    ggplot2::labs(fill = "Count") +
+    # Limit axis text to a certain number of characters, so that long text doesn't ruin the chart display
+    ggplot2::scale_x_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
+    ggplot2::scale_y_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) + 
+    ggplot2::ggtitle("Study Heatmap", subtitle = paste(selcols[2], "by", selcols[1])) +
+    ggplot2::theme(axis.title.x = ggplot2::element_text(size = 12), 
+                   axis.title.y = ggplot2::element_text(size = 12)) 
+  
+  
+  
+  heatmp
 }
 
 get_histogram_viable_columns <- function(df) {
@@ -100,7 +145,7 @@ shinyServer(function(input, output, session) {
       options = list(
         scrollX = TRUE,
         scrollY = TRUE,
-        pageLength = 10,
+        pageLength = 3,
         autoWidth = FALSE,
         responsive = T,
         dom = "<'row'<'col-sm-1'f>><'row'<'col-sm-6'B>>rtlip",
@@ -148,7 +193,7 @@ shinyServer(function(input, output, session) {
           inputId = "heat_select_x",
           label = "Select X variable",
           choices = c("", get_histogram_viable_columns(data_active())),
-          selected = "nation_abbreviation",
+          selected = "year",
         )
       ),
       div(
@@ -158,7 +203,7 @@ shinyServer(function(input, output, session) {
           inputId = "heat_select_y",
           label = "Select Y variable",
           choices = c("", get_histogram_viable_columns(data_active())),
-          selected = "year"
+          selected = "Region"
         )
       )
     ))
@@ -234,7 +279,7 @@ shinyServer(function(input, output, session) {
       
   # render map
   observe({
-        custom_pal <- colorRampPalette(c("#CFFFF2", "#027B68"))
+        custom_pal <- colorRampPalette(c("#e5f5e0", "#31a354"))
         circle_pal <-
           colorNumeric(palette = custom_pal(5),
                        domain = data_active()$total_of_country)
@@ -274,7 +319,7 @@ shinyServer(function(input, output, session) {
             lat = ~ lat_plotted,
             lng = ~ lng_plotted,
             layerId = ~ nation_abbreviation,
-            radius = 1 * data_active()$total_of_country,
+            radius = 1.25 * data_active()$total_of_country,
             color = circle_pal(data_active()$total_of_country),
             stroke = FALSE,
             fillOpacity = 0.7,

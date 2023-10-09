@@ -32,9 +32,9 @@ GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
             dplyr::count(listone, listtwo) %>%
             tidyr::complete(listone, listtwo, fill = list(n = 0)) %>%
             ggplot2::ggplot(aes(x = listone, y = listtwo, fill= n, label= n)) +
-            ggplot2::geom_tile(alpha=0.3, color="grey60") +
+            ggplot2::geom_tile(aes(alpha = ifelse(n == 0, 0, 1)), color="grey60") +
             ggplot2::geom_text() +
-            viridis::scale_fill_viridis() +
+            ggplot2::scale_fill_gradientn(colors = c("white", "red")) +
             ggplot2::theme_minimal() +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
                            panel.grid = element_blank(), 
