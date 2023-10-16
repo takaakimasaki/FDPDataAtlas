@@ -109,16 +109,16 @@ body <- dashboardBody(
             htmlOutput("start_text")
           ),
           wellPanel(style = "background-color: transparent; border: none",
-            fluidRow(
-              h3("Data sources"),
-              fluidRow(
-                column(6, img(src = "unhcr-logo.png", alt = "UNHCR", width = "350px")),
-                column(6, img(src = "wb-logo.png", alt = "World Bank", width = "350px"))
-              ),
-              h3("Developed by"),
-              img(src = "logos.png", alt = "Joint Data Center on Forced Displacement (World Bank & UNHCR)", width = "300px")
-          
-            )
+                    fluidRow(
+                      h3("Data sources"),
+                      fluidRow(
+                        column(6, a(href = "https://microdata.unhcr.org/index.php/home", target="_blank", img(src = "unhcr-logo.png", alt = "UNHCR", width = "350px"))),
+                        column(6, a(href = "https://microdata.worldbank.org/", target="_blank", img(src = "wb-logo.png", alt = "World Bank", width = "350px")))
+                      ),
+                      h3("Developed by"),
+                      a(href = "https://www.jointdatacenter.org/", target="_blank", img(src = "logos.png", alt = "Joint Data Center on Forced Displacement (World Bank & UNHCR)", width = "300px"))
+                    )
+                    
           )
           
         )
