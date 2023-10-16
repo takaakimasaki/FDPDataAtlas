@@ -54,8 +54,8 @@ sidebar <- dashboardSidebar(
       tabName = "data",
       icon = icon("database")
     ),
-    menuItem("Resources",
-      tabName = "resources",
+    menuItem("Data Dictionary",
+      tabName = "data-dictionary",
       icon = icon("list")
     ),
     menuItem("View Code",
@@ -108,10 +108,19 @@ body <- dashboardBody(
           12, wellPanel(
             htmlOutput("start_text")
           ),
-          wellPanel(
-            h3("Data Dictionary"),
-            tableOutput("data_summary")
+          wellPanel(style = "background-color: transparent; border: none",
+            fluidRow(
+              h3("Data sources"),
+              fluidRow(
+                column(6, img(src = "unhcr-logo.png", alt = "UNHCR", width = "350px")),
+                column(6, img(src = "wb-logo.png", alt = "World Bank", width = "350px"))
+              ),
+              h3("Developed by"),
+              img(src = "logos.png", alt = "Joint Data Center on Forced Displacement (World Bank & UNHCR)", width = "300px")
+          
+            )
           )
+          
         )
       )
     ),
@@ -157,12 +166,13 @@ tabItem(tabName = "insightplots",
       )
     ),
     tabItem(
-      tabName = "resources",
+      tabName = "data-dictionary",
       fluidRow(
         column(
           12,
           wellPanel(
-            tabsetPanel()
+            h3("Data Dictionary"),
+            tableOutput("data_summary")
           )
         )
       )

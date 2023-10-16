@@ -73,7 +73,7 @@ GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
   heatmp
 }
 
-get_histogram_viable_columns <- function(df) {
+get_cols_for_plot <- function(df) {
   list_cols <- colnames(df %>%
              dplyr::select_if(function(x) dplyr::n_distinct(x) < 45))
   
@@ -128,7 +128,7 @@ shinyServer(function(input, output, session) {
   # outline of what the dataset contains
   output$data_summary <- renderTable({
     if (!is.null(data_internal$raw)) {
-      datadict <- FDPDataAtlas::datadictionary
+      datadict <- read.csv("www/data-dictionary.csv")
       return(datadict)
     }
   })
@@ -175,7 +175,7 @@ shinyServer(function(input, output, session) {
     selectInput(
       inputId = "select_loc_col",
       label = "Plot the number of datasets by:",
-      choices = c("", get_histogram_viable_columns(data_active())),
+      choices = c("", get_cols_for_plot(data_active())),
       selected = "nation_name"
     )
   })
@@ -192,7 +192,7 @@ shinyServer(function(input, output, session) {
         selectInput(
           inputId = "heat_select_x",
           label = "Select X variable",
-          choices = c("", get_histogram_viable_columns(data_active())),
+          choices = c("", get_cols_for_plot(data_active())),
           selected = "year",
         )
       ),
@@ -202,7 +202,7 @@ shinyServer(function(input, output, session) {
         selectInput(
           inputId = "heat_select_y",
           label = "Select Y variable",
-          choices = c("", get_histogram_viable_columns(data_active())),
+          choices = c("", get_cols_for_plot(data_active())),
           selected = "Region"
         )
       )
@@ -304,7 +304,8 @@ shinyServer(function(input, output, session) {
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
-          addProviderTiles(providers$Esri.WorldTerrain) %>%
+          # addProviderTiles(providers$Esri.WorldTerrain) %>%
+          leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
         leaflet::addPolygons(
             data = FDPDataAtlas::bounds,
             layerId = ~ ISO_A3,
@@ -314,6 +315,13 @@ shinyServer(function(input, output, session) {
             weight = 1,
             fillOpacity = 0.7,
             #label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
+          ) %>%
+          leaflet::addLegend(
+            pal = pal,
+            values = ~ ref_data_filtered()$value,
+            opacity = 0.7,
+            title = input$selected_variable,
+            layerId = "ref_data"
           ) %>%
           leaflet::addCircleMarkers(
             lat = ~ lat_plotted,
@@ -417,8 +425,7 @@ shinyServer(function(input, output, session) {
         color = "white",
         dashArray = "3",
         weight = 1,
-        fillOpacity = 0.7,
-        # label = sprintf("%s: %d",data_active()$nation_abbreviation, data_active()$total_of_country)
+        fillOpacity = 0.7
       ) %>%
       leaflet::addLegend(
         pal = pal,
