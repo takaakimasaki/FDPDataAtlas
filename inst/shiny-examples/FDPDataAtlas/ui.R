@@ -31,10 +31,10 @@ easyprint_js_file <- "https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/di
 
 sidebar <- dashboardSidebar(
 
-  # sidebarUserPanel("FDP Data Atlas Nav"),
+  # sidebarUserPanel("Forced Displacement Microdata Atlas Nav"),
   sidebarMenu(
     id = "main_sidebar",
-    menuItem("About FDP Data Atlas",
+    menuItem("About Forced Displacement Microdata Atlas",
       tabName = "about",
       icon = icon("question")
     ),
@@ -69,7 +69,7 @@ sidebar <- dashboardSidebar(
 home <- tags$html(
   tags$head(
     includeHTML("www/google-analytics.html"),
-    tags$title("FDP Data Atlas"),
+    tags$title("Forced Displacement <br> Microdata Atlas"),
     tags$script(src = easyprint_js_file)
   ),
   tags$style(
@@ -182,7 +182,7 @@ tabItem(tabName = "insightplots",
 
 shinyUI(
   dashboardPage(
-    dashboardHeader(title = "FDP Data Atlas"),
+    dashboardHeader(title = "Forced Displacement Microdata Atlas"),
     sidebar,
     body
   )
