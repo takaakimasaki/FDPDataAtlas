@@ -13,7 +13,7 @@
 sys_map_shapefile <- function(shp, popups = "") {
   
   leaflet(shp) %>%
-    addTiles(layerId = "atlas_basemap") %>% 
+    leaflet::addProviderTiles(providers$Esri.WorldTerrain) %>%
     leafem::addFeatures(data = shp, 
                 group = 'atlas_shapefile', 
                 fillColor = "green",
