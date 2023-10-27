@@ -304,7 +304,6 @@ shinyServer(function(input, output, session) {
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
-          # addProviderTiles(providers$Esri.WorldTerrain) %>%
           leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
         leaflet::addPolygons(
             data = FDPDataAtlas::bounds,
@@ -418,6 +417,7 @@ shinyServer(function(input, output, session) {
     
     leafletProxy("map", data = data_active()) %>%
       leaflet::clearMarkers() %>%
+      leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
       leaflet::addPolygons(
         data = FDPDataAtlas::bounds,
         layerId = ~ ISO_A3,
