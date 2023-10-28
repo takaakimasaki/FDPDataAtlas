@@ -30,14 +30,8 @@ easyprint_js_file <- "https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/di
 
 
 sidebar <- dashboardSidebar(
-
-  # sidebarUserPanel("Forced Displacement Microdata Atlas Nav"),
   sidebarMenu(
     id = "main_sidebar",
-    menuItem("About Forced Displacement Microdata Atlas",
-      tabName = "about",
-      icon = icon("question")
-    ),
     menuItem("Data Atlas",
       tabName = "home",
       icon = icon("map")
@@ -58,6 +52,10 @@ sidebar <- dashboardSidebar(
       tabName = "data-dictionary",
       icon = icon("list")
     ),
+    menuItem("About",
+             tabName = "about",
+             icon = icon("question")
+    ),
     menuItem("View Code",
       href = "https://github.com/takaakimasaki/FDPDataAtlas",
       icon = icon("github")
@@ -69,7 +67,7 @@ sidebar <- dashboardSidebar(
 home <- tags$html(
   tags$head(
     includeHTML("www/google-analytics.html"),
-    tags$title("Forced Displacement <br> Microdata Atlas"),
+    tags$title("Forced Displacement Microdata Atlas"),
     tags$script(src = easyprint_js_file)
   ),
   tags$style(
@@ -110,11 +108,11 @@ body <- dashboardBody(
           ),
           wellPanel(style = "background-color: transparent; border: none",
                     fluidRow(
-                      h3("Data sources"),
-                      fluidRow(
-                        column(6, a(href = "https://microdata.unhcr.org/index.php/home", target="_blank", img(src = "unhcr-logo.png", alt = "UNHCR", width = "350px"))),
-                        column(6, a(href = "https://microdata.worldbank.org/", target="_blank", img(src = "wb-logo.png", alt = "World Bank", width = "350px")))
-                      ),
+                      # h3("Data sources"),
+                      # fluidRow(
+                      #   column(6, a(href = "https://microdata.unhcr.org/index.php/home", target="_blank", img(src = "unhcr-logo.png", alt = "UNHCR", width = "350px"))),
+                      #   column(6, a(href = "https://microdata.worldbank.org/", target="_blank", img(src = "wb-logo.png", alt = "World Bank", width = "350px")))
+                      # ),
                       h3("Developed by"),
                       a(href = "https://www.jointdatacenter.org/", target="_blank", img(src = "logos.png", alt = "Joint Data Center on Forced Displacement (World Bank & UNHCR)", width = "300px"))
                     )
@@ -172,7 +170,7 @@ tabItem(tabName = "insightplots",
           12,
           wellPanel(
             h3("Data Dictionary"),
-            tableOutput("data_summary")
+            DT::dataTableOutput("data_summary")
           )
         )
       )
@@ -180,9 +178,11 @@ tabItem(tabName = "insightplots",
   )
 )
 
+
+
 shinyUI(
   dashboardPage(
-    dashboardHeader(title = "Forced Displacement Microdata Atlas"),
+    dashboardHeader(title = "Forced Displacement Microdata Atlas – Where do we have microdata?",titleWidth = "97%"),
     sidebar,
     body
   )

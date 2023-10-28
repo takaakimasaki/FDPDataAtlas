@@ -121,15 +121,17 @@ shinyServer(function(input, output, session) {
     d_out <- d_out %>%
       left_join(country_count, by = "nation_abbreviation")
     
+    d_out$year <- as.factor(d_out$year)
     return(d_out)
   })
   
   
-  # outline of what the dataset contains
-  output$data_summary <- renderTable({
+  output$data_summary <- DT::renderDataTable({
     if (!is.null(data_internal$raw)) {
       datadict <- read.csv("www/data-dictionary.csv")
-      return(datadict)
+      # DT::datatable(datadict)
+      DT::datatable(datadict, options = list(pageLength = 39,lengthChange=FALSE,paging=FALSE,info=FALSE))
+      
     }
   })
   
@@ -145,7 +147,7 @@ shinyServer(function(input, output, session) {
       options = list(
         scrollX = TRUE,
         scrollY = TRUE,
-        pageLength = 3,
+        pageLength = 4,
         autoWidth = FALSE,
         responsive = T,
         dom = "<'row'<'col-sm-1'f>><'row'<'col-sm-6'B>>rtlip",
@@ -165,9 +167,9 @@ shinyServer(function(input, output, session) {
       class = "display"
     ),
     server = F
-  )
+  ) 
  
-  
+  ##########
   # Location Frequency Plot
   output$location_plot_selector <- renderUI({
     req(data_internal$raw)
@@ -300,7 +302,6 @@ shinyServer(function(input, output, session) {
         
       })
       
-      # print(colnames(data_active()))
       
       output$map <- renderLeaflet({
         generate_systematic_map()  %>%
