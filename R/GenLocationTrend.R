@@ -28,8 +28,8 @@ GenLocationTrend = function(df, location_column, axis_txt_lim = 60){
     ggplot2::geom_bar(alpha=0.9, stat="identity",fill="light green") +
     ggplot2::scale_x_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
     ggplot2::geom_text(aes(), size = 3, nudge_y = 10) +
-    ggplot2::labs(y="# Studies") + 
-    ggplot2::ggtitle(paste(location_column, "frequency")) +
+    ggplot2::labs(y="# of datasets") + 
+    ggplot2::ggtitle(paste(" ")) +
     ggplot2::theme_bw()+
     ggplot2::theme(axis.line = element_line(colour = "black"),
           panel.background = element_blank(),

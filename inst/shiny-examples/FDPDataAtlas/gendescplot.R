@@ -45,9 +45,9 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
              y) # Trim the label if it's too long
     }) +
     # ggplot2::geom_text(aes(), size = 4, nudge_x = 0.5) +
-    ggplot2::labs(x="# Studies", 
+    ggplot2::labs(x="# of datasets", 
                   y="", 
-                  title = paste(location_column, "frequency")) +
+                  title = paste("")) +
     theme_unhcr(grid="N") + 
     ggplot2::theme(
       axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 5, r = 0, b = 0, l = 0)), 
