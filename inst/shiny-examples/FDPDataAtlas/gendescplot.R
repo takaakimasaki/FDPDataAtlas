@@ -1,6 +1,5 @@
 #' Create bar plot with distribution of studies over the region from lat/long info
 #'
-#' Created For ES Hackathon 2018
 #' @param df Input dataframe
 #' @param location_column Column with location information (preferably country-level or higher)
 #' @param axis_txt_lim Numeric limit of number of characters in labels
@@ -52,19 +51,7 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
     ggplot2::theme(
       axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 5, r = 0, b = 0, l = 0)), 
     )
-    # ggplot2::theme_bw() +
-    # 
-    # ggplot2::theme(
-    #   axis.line = element_line(colour = "black"),
-    #   panel.background = element_blank(),
-    #   plot.title = element_text(hjust = 0.5, size = 20),
-    #   axis.title.x = element_text(size = 18),
-    #   axis.title.y = element_text(size = 18),
-    #   axis.text.x = element_text(size = 14),
-    #   axis.text.y = element_text(size = 14),
-    #   # plot.margin = margin(20, 20, 20, 20) # Add margins
-    # )
-  
+    
   # Rotate x-axis label if too many
   if (nrow(location_counts) > 5){
     locmp <- locmp + ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 11))
