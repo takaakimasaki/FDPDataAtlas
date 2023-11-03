@@ -22,7 +22,7 @@ GenTimeTrend.default <- function(idata, hist_col, axis_txt_lim = 60){
       stat = "count",
       fill = "dodger blue"
     ) +
-    ggplot2::labs(y = "Studies") +
+    ggplot2::labs(y = "Datasets") +
     ggplot2::scale_x_discrete(name = paste(hist_col), labels = function(x) substr(x, 1, axis_txt_lim)) +
     ggplot2::theme_bw() +
     ggplot2::theme(
@@ -59,7 +59,7 @@ GenTimeTrend.numeric <- function(idata, hist_col, axis_txt_lim = 60){
       stat = "count",
       fill = "dodger blue"
     ) +
-    ggplot2::labs(y = "Studies") +
+    ggplot2::labs(y = "Datasets") +
     ggplot2::theme_bw() +
     ggplot2::theme(
       axis.line = ggplot2::element_line(colour = "black"),
