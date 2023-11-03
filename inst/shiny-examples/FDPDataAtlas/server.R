@@ -38,9 +38,10 @@ get_cols_for_plot <- function(df) {
   cols_to_remove <-
     c(
       "method_data_collectors_name",
-      "entity contact" ,
+      "entity_contact" ,
       "disclaimer",
       "project_specific",
+      "analysis_unit",
       "total_of_country",
       "idp",
       "Longitude",
@@ -51,35 +52,6 @@ get_cols_for_plot <- function(df) {
   
   return(final_list)
   
-}
-
-# # heatmap
-GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
-  listone<-listtwo<-n<-NULL
-  # Convert columns to factors to allow for categorical classification for both numeric and character data
-  tmp <- as.data.frame(sapply(idata[selcols], function(x) as.factor(x)))
-
-  # Plot Heatmap
-  heatmp <- tmp %>%
-    dplyr::rename(listone=colnames(tmp[1]), listtwo=colnames(tmp[2]))%>%
-    dplyr::count(listone, listtwo) %>%
-    tidyr::complete(listone, listtwo, fill = list(n = 0)) %>%
-    dplyr::mutate(listtwo = forcats::fct_rev(forcats::fct_inorder(listtwo))) %>%  # Sort listtwo in reverse alphabetical order
-    ggplot2::ggplot(aes(x = listone, y = listtwo, fill= n, label= n)) +
-    ggplot2::geom_tile(aes(alpha = 0.3), color="grey60") +
-    ggplot2::geom_text() +
-    ggplot2::scale_fill_gradientn(colors = c("white", "#0072BC")) +
-    theme_unhcr(grid="N")    +
-    ggplot2::xlab(paste0(selcols[1])) +
-    ggplot2::ylab(paste0(selcols[2])) +
-    ggplot2::labs(fill = "Count") +
-    ggplot2::scale_x_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
-    ggplot2::scale_y_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
-    ggplot2::ggtitle("Heatmap") +
-    ggplot2::theme(axis.title.x = ggplot2::element_text(size = 12),
-                   axis.title.y = ggplot2::element_text(size = 12))
-
-  heatmp
 }
 
 # general config 
@@ -183,15 +155,6 @@ shinyServer(function(input, output, session) {
            )
          )
        ),
-       # buttons = c("copy", "csv", "excel", "print"),
-       # buttons = list(
-       #   list(extend = "csv", text = "CSV", filename = "FDP_Data_atlas",
-       #        exportOptions = list(
-       #          modifier = list(page = "all"),
-       #          orthogonal = "export"
-       #        )
-       #   )
-       # ),
        columnDefs = list(list(
          targets = "_all",
          render = JS("$.fn.dataTable.render.ellipsis( 30 )")
@@ -225,6 +188,36 @@ shinyServer(function(input, output, session) {
  })
  
  # Heatmap
+ GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
+   listone<-listtwo<-n<-NULL
+   # Convert columns to factors to allow for categorical classification for both numeric and character data
+   tmp <- as.data.frame(sapply(idata[selcols], function(x) as.factor(x)))
+   # Plot Heatmap
+   heatmp <- tmp %>%
+     dplyr::rename(listone=colnames(tmp[1]), listtwo=colnames(tmp[2])) %>%
+     dplyr::count(listone, listtwo) %>%
+     tidyr::complete(listone, listtwo, fill = list(n = 0)) %>%
+     dplyr::mutate(listtwo = forcats::fct_rev(forcats::fct_inorder(listtwo)),  # Sort listtwo in reverse alphabetical order
+                   tooltip_text = paste(selcols[1], ':', listone, '<br>', selcols[2], ':', listtwo, '<br>Count:', n)) %>%
+     ggplot(aes(x = listone, y = listtwo, fill = n, text = tooltip_text)) +  # Add the tooltip_text aesthetic here
+     geom_tile(aes(alpha = 0.3), color="grey60") +
+     geom_text(aes(label = n), vjust = 1) +  # Display only the count on the heatmap
+     scale_fill_gradientn(colors = c("white", "#0072BC")) +
+     xlab(paste0(selcols[1])) +
+     ylab(paste0(selcols[2])) +  
+     labs(fill = "Count") +
+     scale_x_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
+     scale_y_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
+     ggtitle("Heatmap") +
+     theme_unhcr(grid="N") +
+     theme(axis.title.x = element_text(size = 12),
+           axis.title.y = element_text(size = 12))
+   
+   # Convert ggplot object to plotly object and specify the tooltip
+   ggplotly(heatmp, tooltip = "text")  # Use "text" because that's the aesthetic we specified for tooltip_text
+ }
+ 
+ 
  output$heatmap_selector <- renderUI({
    req(data_internal$raw)
    div(list(
