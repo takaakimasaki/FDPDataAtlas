@@ -138,6 +138,7 @@ shinyServer(function(input, output, session) {
      data_active(),
      extensions = "Buttons",
      filter = "top",
+     plugins = "ellipsis",
      style = "bootstrap",
      options = list(
        scrollX = TRUE,
@@ -145,16 +146,55 @@ shinyServer(function(input, output, session) {
        pageLength = 3,
        autoWidth = FALSE,
        responsive = T,
-       dom = "<'row'<'col-sm-1'f>><'row'<'col-sm-6'B>>rtlip",
-       buttons = c("copy", "csv", "excel", "print"),
+       dom = "<'row'<'col-sm-2'f>><'row'<'col-sm-6'B>>rtlip",
+       buttons = list(
+         list(
+           extend = "copy",
+           text = "Copy",
+           exportOptions = list(
+             modifier = list(page = "all"),
+             orthogonal = "export"
+           )
+         ),
+         list(
+           extend = "csv",
+           text = "CSV",
+           filename = "FDP_Data_atlas",
+           exportOptions = list(
+             modifier = list(page = "all"),
+             orthogonal = "export"
+           )
+         ),
+         list(
+           extend = "excel",
+           text = "Excel",
+           filename = "FDP_Data_atlas",
+           exportOptions = list(
+             modifier = list(page = "all"),
+             orthogonal = "export"
+           )
+         ),
+         list(
+           extend = "print",
+           text = "Print",
+           exportOptions = list(
+             modifier = list(page = "all"),
+             orthogonal = "export"
+           )
+         )
+       ),
+       # buttons = c("copy", "csv", "excel", "print"),
+       # buttons = list(
+       #   list(extend = "csv", text = "CSV", filename = "FDP_Data_atlas",
+       #        exportOptions = list(
+       #          modifier = list(page = "all"),
+       #          orthogonal = "export"
+       #        )
+       #   )
+       # ),
        columnDefs = list(list(
          targets = "_all",
-         render = JS(
-           "function(data, type, row, meta) {",
-           "return type === 'display' && data != null && data.length > 30 ?",
-           "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
-           "}"
-         )
+         render = JS("$.fn.dataTable.render.ellipsis( 30 )")
        ))
      ),
      class = "display"
