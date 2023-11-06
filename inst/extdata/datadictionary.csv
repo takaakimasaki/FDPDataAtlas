@@ -1,40 +1,62 @@
 Name,Description,Source
-nation_name,Country name,UNHCR/WB
-nation_abbreviation,ISO-3 country abbreviation,UNHCR/WB
-year,Year of data collection,UNHCR/WB
 id,Unique numeric ID,UNHCR/WB
 idno,Unique string ID,UNHCR/WB
+nation_abbreviation,ISO-3 country abbreviation,UNHCR/WB
+statement_title,Dataset title,UNHCR/WB
+data_url,URL,UNHCR/WB
+nation_name,Country name,UNHCR/WB
+year,Year of data collection,UNHCR/WB
 producers_name,Name(s) of data producer(s),UNHCR/WB
 entity_name,Name(s) of entity/entities involved in data collection,UNHCR/WB
 entity_contact,Contact information of involved entities,UNHCR/WB
 abstract,Brief description and scope of the dataset,UNHCR/WB
 coll_dates,"Year, month, and day data collection began and ended",UNHCR/WB
-analysis_unit,"Unit of analysis or data (e.g., household, individual, child, family, and group, indicating the unit of analysis used in the survey",UNHCR/WB
-geog_coverage,Geographical coverage of the dataset,UNHCR/WB
+analysis_unit,Unit of analysis or data,UNHCR/WB
+geog_coverage,Geographical coverage,UNHCR/WB
 data_kind,"Type of survey (e.g., sample survey, census, event, multi-frame, no sampling)",UNHCR/WB
 notes,Description of topics and modules covered in the survey,UNHCR/WB
+method_data_collectors_name,Method of data collection,UNHCR/WB
 method_sampling,Description of sampling,UNHCR/WB
 method_coll_mode,"Mode of data collection (e.g., face-to-face, CAPI, CATI, Telephone, other)",UNHCR/WB
 method_weight,Description of sampling weights,UNHCR/WB
-topic_id,Numerical identifiers for which topics are covered in the survey,Authors
-topic_word,Text description of words associated with specific topics in the dataset,Authors
-topic_main,"Indicator of the main topic covered in the survey: Water & Sanitation, Food insecurity, Health, Social protection, Poverty/Welfare, Energy, Labor, and Others",Authors
+topic_id,Numerical identifiers for which topics are covered in the survey based on nlp4dev (https://www.nlp4dev.org/),Authors
+topic_words,Text identifiers for which topics are covered in the survey based on nlp4dev (https://www.nlp4dev.org/),Authors
+topic_main,Indicator of the main topic covered in the survey based on nlp4dev (https://www.nlp4dev.org/),Authors
 project_specific,Binary indicator of whether the dataset was project specific or not: Yes or no,Authors
 idp,Binary indicator of whether the dataset includes IPDs or not: Yes or no,Authors
-Longitude,Numeric coordinates of location of survey,Authors
-Latitude,Numeric coordinates of location of survey,Authors
-database,Indicator of which MDL the database came from,Authors
+Longitude,Longitude of country of data collection,Authors
+Latitude,Latitude of country of data collection,Authors
 Region,"Name of the region where the survey took place: Middle East & North Africa, Sub-Saharan Africa, South-Asia, Latin America & Caribbean",Authors
-Economy,Name of the economy that is the context for the survey,Authors
 income_group,"The income status of the country: Low income, Lower middle income, Upper middle income",Authors
-country_of_birth,Binary indicator whether the survey asks a respondent their country of birth: Yes or no,Authors
-country_of_citizenship,Binary indicator whether survey asks country of citizenship: Yes or no,Authors
-date_arrival,Binary indicator whether the survey asks a respondent their date of arrival: Yes or no,Authors
-reason_for_migration,Binary indicator whether the survey asks their reason for migration: Yes or no,Authors
-place_of_birth,Binary indicator whether the survey asks a respondent their place of birth: Yes or no,Authors
-date_of_first_dp,Binary indicator whether the survey asks the date of first displacement: Yes or no,Authors
-date_of_recent_dp,Binary indicator whether the survey asks the date of recent displacement: Yes or no,Authors
-main_reason_initial,Binary indicator whether the survey asks the main reason of migration: Yes or no,Authors
-loc_habit,Binary indicator whether the survey asks the location of habitual residence,Authors
-loc_usual,Binary indicator whether the survey asks the location of usual residence,Authors
-series_id,Numerical indicator for the series ID,Authors
+country_of_birth,Binary indicator of whether the survey asks a respondent their country of birth: Yes or no,Authors
+country_of_citizenship,Binary indicator of whether survey asks country of citizenship: Yes or no,Authors
+acquisition_of_citizenship,Binary indicator of whether survey asks aquisition of citizenship: Yes or no,Authors
+date_arrival,Binary indicator of whether the survey asks a respondent their date of arrival: Yes or no,Authors
+reason_for_migration,Binary indicator of whether the survey asks their reason for migration: Yes or no,Authors
+place_of_birth,Binary indicator of whether the survey asks a respondent their place of birth: Yes or no,Authors
+date_of_first_dp,Binary indicator of whether the survey asks the date of first displacement: Yes or no,Authors
+date_of_recent_dp,Binary indicator of whether the survey asks the date of recent displacement: Yes or no,Authors
+main_reason_initial,Binary indicator of whether the survey asks the main reason of initial displacement: Yes or no,Authors
+main_reason_recent,Binary indicator of whether the survey asks the main reason of most recent displacement: Yes or no,Authors
+loc_habit,Binary indicator of whether the survey asks the location of habitual residence,Authors
+loc_usual,Binary indicator of whether the survey asks the location of usual residence,Authors
+tag_new_food_insecurity,Binary indicator of whether the dataset covers the topic of food insecurity,Authors
+tag_new_health,Binary indicator of whether the dataset covers the topic of health,Authors
+tag_new_water_sanitation,Binary indicator of whether the dataset covers the topic of water and sanitation,Authors
+tag_new_education,Binary indicator of whether the dataset covers the topic of education,Authors
+tag_new_welfare,Binary indicator of whether the dataset covers the topic of welfare,Authors
+tag_new_labor_employment,Binary indicator of whether the dataset covers the topic of labor and employment,Authors
+tag_new_finance_credit_debt,"Binary indicator of whether the dataset covers the topic of finance, credit and debt",Authors
+tag_new_protection,Binary indicator of whether the dataset covers the topic of protection,Authors
+tag_new_gender,Binary indicator of whether the dataset covers the topic of gender,Authors
+tag_new_safety_security_conflict,Binary indicator of whether the dataset covers the topic of safety and security,Authors
+tag_new_housing_assets,Binary indicator of whether the dataset covers the topic of assets,Authors
+tag_new_shocks,Binary indicator of whether the dataset covers the topic of shocks,Authors
+tag_new_agriculture_livestock_fishery,Binary indicator of whether the dataset covers the topic of agriculture/livestock/fishery,Authors
+tag_new_subjective_poverty,Binary indicator of whether the dataset covers the topic of subjective wellbeing,Authors
+tag_new_coping_mechanisms,Binary indicator of whether the dataset covers the topic of coping mechanisms,Authors
+tag_new_demographics,Binary indicator of whether the dataset covers the topic of demographics,Authors
+tag_new_social,Binary indicator of whether the dataset covers the topic of social,Authors
+tag_new_remmitance,Binary indicator of whether the dataset covers the topic of remmitance,Authors
+tag_new_child_labor,Binary indicator of whether the dataset covers the topic of child labor,Authors
+tag_new_migration,Binary indicator of whether the dataset covers the topic of migration,Authors

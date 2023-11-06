@@ -18,7 +18,9 @@ pacman::p_load(devtools,dplyr,tidyverse,sf,here, devtools)
 ```
 If any update has been made in the metadata, run this chunk. 
 ```{r, echo=FALSE, eval=FALSE}
-metadata <- read_csv(here::here("inst","extdata","metadata_v2.csv")) %>% filter(!is.na(Longitude))
+metadata <- read_csv(here::here("inst","extdata","metadata_v2.csv")) %>% 
+  filter(!is.na(Longitude)) %>%
+  dplyr::select(-database,-method_research_instrument,-cit_req,-disclaimer,-Region_v2,-Economy)
 bounds <- read_rds(here::here("inst","extdata","wb_bounds.rds")) 
 bounds %>%
   st_drop_geometry() %>%

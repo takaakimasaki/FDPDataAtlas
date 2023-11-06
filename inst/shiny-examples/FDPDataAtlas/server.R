@@ -91,7 +91,7 @@ shinyServer(function(input, output, session) {
 # Data dictionary
  output$data_summary <- DT::renderDataTable({
    if (!is.null(data_internal$raw)) {
-     datadict <- read.csv("www/data-dictionary.csv")
+     datadict <- FDPDataAtlas::datadictionary
      DT::datatable(
        datadict,
        options = list(
