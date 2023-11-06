@@ -64,7 +64,7 @@
   home <- tags$html(
     tags$head(
       includeHTML("www/google-analytics.html"),
-      tags$title("Forced Displacement Microdata Atlas"),
+      tags$title("Forced Displacement Microdata"),
       tags$script(src = easyprint_js_file)
     ),
     tags$style(
@@ -170,7 +170,7 @@
   
   shinyUI(
     dashboardPage(
-      dashboardHeader(title = "Forced Displacement Microdata Atlas – Where do we have microdata?",titleWidth = "97%"),
+      dashboardHeader(title = "Forced Displacement Microdata – Where do we have microdata?",titleWidth = "97%"),
       sidebar,
       body
     )
