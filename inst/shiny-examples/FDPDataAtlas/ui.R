@@ -69,10 +69,10 @@
     ),
     tags$style(
       type = "text/css",
-      "#map {height: calc(100vh - 240px) !important;}"
+      "#map {height: calc(100vh - 160px) !important;}"
     ),
     tags$body(
-      leafletOutput("map", height = 600)
+      leafletOutput("map")
     )
   )
   
@@ -115,8 +115,13 @@
       ),
       tabItem(
         tabName = "home",
+        fluidRow(column(9,
+                        align="center",
+                        HTML("<span style='color: darkgreen;'>Circles</span> represent the number of surveys available. Click on a country to check the surveys available.")
+                        )),
         fluidRow(
-          column(9, box(width = 12, home), style = "padding-right: 0px;"), # show map
+          column(9,
+                 box(width = 12, home), style = "padding-right: 0px;"), # show map
           column(3, wellPanel(
             fluidRow(
               selectInput(

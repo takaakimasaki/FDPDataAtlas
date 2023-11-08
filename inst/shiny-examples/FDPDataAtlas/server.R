@@ -20,15 +20,13 @@ library(shinydashboard)
 library(shinyWidgets)
 library(shinyBS)
 library(RColorBrewer)
-library(leaflet.providers)
+
 if (webshot::is_phantomjs_installed() == FALSE) {
  webshot::install_phantomjs()
 }
 
 # functions
 source("gendescplot.R")
-
-
 
 get_cols_for_plot <- function(df) {
   list_cols <- colnames(df %>%
@@ -91,7 +89,7 @@ shinyServer(function(input, output, session) {
 # Data dictionary
  output$data_summary <- DT::renderDataTable({
    if (!is.null(data_internal$raw)) {
-     datadict <- FDPDataAtlas::datadictionary
+     datadict <- read.csv("www/data-dictionary.csv")
      DT::datatable(
        datadict,
        options = list(
@@ -305,48 +303,8 @@ shinyServer(function(input, output, session) {
    
    output$map <- renderLeaflet({
      gen_map()  %>%
-       addProviderTiles(providers$Esri.WorldTerrain) %>%
-       #leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
-       leaflet::addPolygons(
-         data = FDPDataAtlas::bounds,
-         layerId = ~ ISO_A3,
-         fillColor = ~ pal(ref_data_filtered()$value),
-         color = "white",
-         dashArray = "3",
-         weight = 1,
-         fillOpacity = 0.7,
-       ) %>%
-       leaflet::addLegend(
-         pal = pal,
-         values = ~ ref_data_filtered()$value,
-         opacity = 0.7,
-         title = input$selected_variable,
-         layerId = "ref_data"
-       ) %>%
-       leaflet::addCircleMarkers(
-         lat = ~ lat_plotted,
-         lng = ~ lng_plotted,
-         layerId = ~ nation_abbreviation,
-         radius = 1.25 * data_active()$total_of_country,
-         color = circle_pal(data_active()$total_of_country),
-         stroke = FALSE,
-         fillOpacity = 0.7,
-         label = sprintf(
-           "%s: %d surveys",
-           data_active()$nation_abbreviation,
-           data_active()$total_of_country
-         )
-       ) %>%
-       leaflet::addLabelOnlyMarkers(
-         lat = ~ lat_plotted,
-         lng = ~ lng_plotted,
-         label = sprintf("%d", data_active()$total_of_country),
-         labelOptions = labelOptions(
-           noHide = T,
-           direction = 'center',
-           textOnly = T
-         )
-       )
+       addProviderTiles(providers$Esri.WorldTerrain) 
+       # #leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
    })
    
 # Color schema
@@ -354,6 +312,7 @@ shinyServer(function(input, output, session) {
                       probs = seq(0, 1, 0.25),
                       na.rm = TRUE)
    breaks <- rev(breaks)
+   
    navy_colors <-
      c("#E0E9FE", "#B8C9EE", "#8395B9", "#506489", "#18375F")
    pal <-
@@ -362,7 +321,7 @@ shinyServer(function(input, output, session) {
 # Display info in sidebar
    output$country_info <- renderUI({
      if (is.null(clicked_ISO_A3())) {
-       return(p("Click on a country to check the surveys available."))
+       return(p(""))
      } else {
        filtered_data <- FDPDataAtlas::metadata %>%
          filter(nation_abbreviation == clicked_ISO_A3())
@@ -425,7 +384,8 @@ shinyServer(function(input, output, session) {
        return(HTML(text_to_display))
      }
    })
-   
+
+   # update map
    leafletProxy("map", data = data_active()) %>%
      leaflet::clearMarkers() %>%
      leaflet::addPolygons(
@@ -441,20 +401,21 @@ shinyServer(function(input, output, session) {
        pal = pal,
        values = ~ ref_data_filtered()$value,
        opacity = 0.7,
-       title = input$selected_variable,
-       layerId = "ref_data"
+       position = "bottomright",
+       title = "Basemap",
+       layerId = "ref_data",
      ) %>%
      leaflet::addCircleMarkers(
        lat = ~ lat_plotted,
        lng = ~ lng_plotted,
        layerId = ~ nation_abbreviation,
-       radius = 1 * data_active()$total_of_country,
+       radius = data_active()$total_of_country,
        color = circle_pal(data_active()$total_of_country),
        stroke = FALSE,
        fillOpacity = 0.7,
        label = sprintf(
          "%s: %d surveys",
-         data_active()$nation_abbreviation,
+         data_active()$nation_name,
          data_active()$total_of_country
        )
      ) %>%
