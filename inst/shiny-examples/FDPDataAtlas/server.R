@@ -93,6 +93,7 @@ shinyServer(function(input, output, session) {
      datadict <- FDPDataAtlas::datadictionary
      DT::datatable(
        datadict,
+       extensions = 'Responsive',
        options = list(
          pageLength = 39,
          lengthChange = FALSE,
@@ -107,6 +108,7 @@ shinyServer(function(input, output, session) {
  output$filtered_table <- DT::renderDataTable(
    DT::datatable(
      data_active(),
+     # extensions = c("Buttons","Responsive"),
      extensions = "Buttons",
      filter = "top",
      plugins = "ellipsis",
