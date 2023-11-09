@@ -34,7 +34,7 @@
                icon = icon("map")
       ),
       menuItem("Descriptive Plots",
-               tabName = "insightplots",
+               tabName = "descplots",
                icon = icon("home")
       ),
       menuItem("Heatmap",
@@ -69,7 +69,7 @@
     ),
     tags$style(
       type = "text/css",
-      "#map {height: calc(100vh - 160px) !important;}"
+      "#map {height: 70vh !important;}"
     ),
     tags$body(
       leafletOutput("map")
@@ -117,7 +117,7 @@
         tabName = "home",
         fluidRow(column(9,
                         align="center",
-                        HTML("<span style='color: darkgreen;'>Circles</span> represent the number of surveys available. Click on a country to check the surveys available.")
+                        HTML("<b><span style='color: #006d2c;'>Circles</span></b> represent the number of surveys available. Click on a country to view the datasets available.")
                         )),
         fluidRow(
           column(9,
@@ -145,7 +145,7 @@
           )
         )
       ),
-      tabItem(tabName = "insightplots",
+      tabItem(tabName = "descplots",
               fluidRow(
                 column(12, uiOutput("location_plot_selector"))  # Full width
               ),
@@ -175,7 +175,7 @@
   
   shinyUI(
     dashboardPage(
-      dashboardHeader(title = "Forced Displacement Microdata – Where do we have microdata?",titleWidth = "97%"),
+      dashboardHeader(title = "Forced Displacement Microdata",titleWidth = "97%"),
       sidebar,
       body
     )

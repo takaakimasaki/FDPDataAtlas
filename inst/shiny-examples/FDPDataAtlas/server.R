@@ -27,6 +27,7 @@ if (webshot::is_phantomjs_installed() == FALSE) {
 
 # functions
 source("gendescplot.R")
+source("genheatmap.R")
 
 get_cols_for_plot <- function(df) {
   list_cols <- colnames(df %>%
@@ -67,18 +68,18 @@ shinyServer(function(input, output, session) {
    cat(start_text)
  })
  
-# Generate dataframe
+# Generate dataframe of surveys per country
  data_active <- reactive({
    req(data_internal$raw)
    
    d_out <- data_internal$raw
    
-   # Group by 'nation_abbreviation' and count the number of records for each group
+   # Group by 'nation_abbreviation' and count the number of records for each country
    country_count <- d_out %>%
      group_by(nation_abbreviation) %>%
      summarise(total_of_country = n())
    
-   # Join this summary back to the original data
+   # Join back to the original data
    d_out <- d_out %>%
      left_join(country_count, by = "nation_abbreviation")
    
@@ -186,36 +187,6 @@ shinyServer(function(input, output, session) {
  })
  
  # Heatmap
- GenHeatMap = function(idata, selcols, axis_txt_lim = 60){
-   listone<-listtwo<-n<-NULL
-   # Convert columns to factors to allow for categorical classification for both numeric and character data
-   tmp <- as.data.frame(sapply(idata[selcols], function(x) as.factor(x)))
-   # Plot Heatmap
-   heatmp <- tmp %>%
-     dplyr::rename(listone=colnames(tmp[1]), listtwo=colnames(tmp[2])) %>%
-     dplyr::count(listone, listtwo) %>%
-     tidyr::complete(listone, listtwo, fill = list(n = 0)) %>%
-     dplyr::mutate(listtwo = forcats::fct_rev(forcats::fct_inorder(listtwo)),  # Sort listtwo in reverse alphabetical order
-                   tooltip_text = paste(selcols[1], ':', listone, '<br>', selcols[2], ':', listtwo, '<br>Count:', n)) %>%
-     ggplot(aes(x = listone, y = listtwo, fill = n, text = tooltip_text)) +  # Add the tooltip_text aesthetic here
-     geom_tile(aes(alpha = 0.3), color="grey60") +
-     geom_text(aes(label = n), vjust = 1) +  # Display only the count on the heatmap
-     scale_fill_gradientn(colors = c("white", "#0072BC")) +
-     xlab(paste0(selcols[1])) +
-     ylab(paste0(selcols[2])) +  
-     labs(fill = "Count") +
-     scale_x_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
-     scale_y_discrete(labels = function(x) substr(x, 1, axis_txt_lim)) +
-     ggtitle("Heatmap") +
-     theme_unhcr(grid="N") +
-     theme(axis.title.x = element_text(size = 12),
-           axis.title.y = element_text(size = 12))
-   
-   # Convert ggplot object to plotly object and specify the tooltip
-   ggplotly(heatmp, tooltip = "text")  # Use "text" because that's the aesthetic we specified for tooltip_text
- }
- 
- 
  output$heatmap_selector <- renderUI({
    req(data_internal$raw)
    div(list(
@@ -285,12 +256,7 @@ shinyServer(function(input, output, session) {
  
  # render map
  observe({
-   custom_pal <- colorRampPalette(c("#e5f5e0", "#31a354"))
-   circle_pal <-
-     colorNumeric(palette = custom_pal(5),
-                  domain = data_active()$total_of_country)
-   
-   lat_plotted <-
+      lat_plotted <-
      as.numeric(unlist(data_active() %>%
                          dplyr::select(Latitude)))
    lng_plotted <-
@@ -300,23 +266,25 @@ shinyServer(function(input, output, session) {
    
    lat_plotted[is.na(lat_plotted)] <- 0
    lng_plotted[is.na(lng_plotted)] <- -20
-   
-   output$map <- renderLeaflet({
-     gen_map()  %>%
-       addProviderTiles(providers$Esri.WorldTerrain) 
-       # #leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
-   })
-   
+
 # Color schema
+   # basemap
    breaks <- quantile(ref_data_filtered()$value,
                       probs = seq(0, 1, 0.25),
                       na.rm = TRUE)
    breaks <- rev(breaks)
    
    navy_colors <-
-     c("#E0E9FE", "#B8C9EE", "#8395B9", "#506489", "#18375F")
+     c("#f1eef6", "#bdc9e1", "#74a9cf", "#2b8cbe", "#045a8d")
    pal <-
      colorBin(navy_colors, domain = ref_data_filtered()$value, bins = breaks)
+   
+   # surveys
+   custom_pal <- colorRampPalette(c("#edf8e9", "#006d2c"))
+   circle_pal <-
+     colorNumeric(palette = custom_pal(5),
+                  domain = data_active()$total_of_country)
+   
    
 # Display info in sidebar
    output$country_info <- renderUI({
@@ -384,8 +352,14 @@ shinyServer(function(input, output, session) {
        return(HTML(text_to_display))
      }
    })
-
-   # update map
+   
+   # map
+   output$map <- renderLeaflet({
+     gen_map()  %>%
+       addProviderTiles(providers$Esri.WorldTerrain) 
+     # #leaflet::addTiles(urlTemplate = "https://api.mapbox.com/styles/v1/gsdpm/civtteddj000z2jodf6dv7vw4/tiles/256/{z}/{x}}/{y}@2x?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2toZjFvZ3gwMG1qODJ4cnpwaDdvenpzMiJ9.01pv2kccL9cXhxO6B-Naiw") %>%
+   })
+   
    leafletProxy("map", data = data_active()) %>%
      leaflet::clearMarkers() %>%
      leaflet::addPolygons(
@@ -395,7 +369,8 @@ shinyServer(function(input, output, session) {
        color = "white",
        dashArray = "3",
        weight = 1,
-       fillOpacity = 0.7
+       fillOpacity = 0.7,
+       label = FDPDataAtlas::bounds$NAME_EN
      ) %>%
      leaflet::addLegend(
        pal = pal,
@@ -409,7 +384,7 @@ shinyServer(function(input, output, session) {
        lat = ~ lat_plotted,
        lng = ~ lng_plotted,
        layerId = ~ nation_abbreviation,
-       radius = data_active()$total_of_country,
+       radius = 3 + sqrt(4 * data_active()$total_of_country),
        color = circle_pal(data_active()$total_of_country),
        stroke = FALSE,
        fillOpacity = 0.7,

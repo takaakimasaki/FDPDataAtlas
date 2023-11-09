@@ -49,7 +49,7 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
                   title = paste("")) +
     theme_unhcr(grid="N") + 
     ggplot2::theme(
-      axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 5, r = 0, b = 0, l = 0)), 
+      axis.title.x = ggplot2::element_text(size = 14, margin = ggplot2::margin(t = 5, r = 0, b = 0, l = 0)),  
     )
     
   # Rotate x-axis label if too many
@@ -59,6 +59,10 @@ GenDescPlots = function(df, location_column, axis_txt_lim = 20){
   
   # Convert to Plotly
   interactive_plot <- ggplotly(locmp,tooltip="text")
+  
+  interactive_plot <- interactive_plot %>%
+    plotly::layout(paper_bgcolor='#ecf0f5', plot_bgcolor='#ecf0f5')
+  
   
   return(interactive_plot)
 }
