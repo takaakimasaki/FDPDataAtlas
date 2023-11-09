@@ -240,14 +240,24 @@ shinyServer(function(input, output, session) {
  gen_map <- reactive(sys_map(data_active()))
  
 # Observe click events
+ ## circles
+ 
+ ## polygons
  clicked_ISO_A3 <- reactiveVal(NULL)
  observe({
-   click <- input$map_shape_click
-   if (is.null(click)) {
+   # check which input has been clicked and assign to 'click' variable
+   click <- if (!is.null(input$map_shape_click)) {
+     input$map_shape_click
+   } else if (!is.null(input$map_marker_click)) {
+     input$map_marker_click
+   } else {
      return()
    }
+   
+   # Use the ID from the click event to update the reactive value
    clicked_ISO_A3(click$id)
  })
+ 
  
  # Refugee statistics
  ref_data_filtered <- reactive({
