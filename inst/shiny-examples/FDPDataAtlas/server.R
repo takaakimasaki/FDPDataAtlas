@@ -237,6 +237,15 @@ shinyServer(function(input, output, session) {
  
 
 # Data Atlas Tab
+ 
+sys_map <- function(studies_data) {
+   
+   basemap <- leaflet::leaflet(studies_data,
+                               options = leafletOptions(minZoom = 2,maxZoom = 8)) %>%
+     leaflet::addProviderTiles(providers$Esri.WorldTerrain) 
+   basemap
+ }
+ 
  gen_map <- reactive(sys_map(data_active()))
  
 # Observe click events
