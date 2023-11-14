@@ -134,7 +134,7 @@
             tags$style(type='text/css', '#country_info { max-height: 600px; overflow-y: auto; }'),
             uiOutput("country_info")), style = "padding-left: 0px;")
         ),
-        fluidRow(column(12,"The boundaries, colors, denominations, and other information shown on any map in this work do not imply any judgment on the part of The World Bank concerning the legal status of any territory or the endorsement or acceptance of such boundaries."))
+        fluidRow(column(12,"The boundaries, colors, denominations, and other information shown on any map in this work do not imply any judgment on the part of The World Bank or UNHCR concerning the legal status of any territory or the endorsement or acceptance of such boundaries."))
       ),
       tabItem(
         tabName = "data",
