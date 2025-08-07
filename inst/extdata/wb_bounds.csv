@@ -1,54 +1,60 @@
-ISO_A3,NAME_EN,income_group,Region,value,ref_pop,idp_pop,other_ven
-IDN,Indonesia,Lower middle income,East Asia & Pacific,237982,9982,228000,NA
-MYS,Malaysia,Upper middle income,East Asia & Pacific,139086,132086,7000,NA
-PER,Peru,Upper middle income,Latin America & Caribbean,65790,5790,60000,791442
-ARG,Argentina,Upper middle income,Latin America & Caribbean,4050,4050,0,164622
-IND,India,Lower middle income,South Asia,740413,212413,528000,NA
-CHN,People's Republic of China,Upper middle income,East Asia & Pacific,1246436,303436,943000,NA
-PSE,Palestine,Lower middle income,Middle East & North Africa,2412208,2400208,12000,NA
-LBN,Lebanon,Lower middle income,Middle East & North Africa,1328591,1328541,50,NA
-ETH,Ethiopia,Low income,Sub-Saharan Africa,4989283,821283,4168000,NA
-SSD,South Sudan,Low income,Sub-Saharan Africa,2229673,333673,1896000,NA
-SOM,Somalia,Low income,Sub-Saharan Africa,2981804,13804,2968000,NA
-KEN,Kenya,Lower middle income,Sub-Saharan Africa,725048,481048,244000,NA
-PAK,Pakistan,Lower middle income,South Asia,1665070,1491070,174000,NA
-TZA,Tanzania,Lower middle income,Sub-Saharan Africa,208041,207101,940,NA
-SYR,Syria,Low income,Middle East & North Africa,7251542,589542,6662000,NA
-COD,Democratic Republic of the Congo,Low income,Sub-Saharan Africa,6064148,524148,5540000,NA
-UKR,Ukraine,Lower middle income,Europe & Central Asia,856394,2382,854012,NA
-BRA,Brazil,Upper middle income,Latin America & Caribbean,108956,61956,47000,175992
-GEO,Georgia,Upper middle income,Europe & Central Asia,334818,1818,333000,NA
-AZE,Azerbaijan,Upper middle income,Europe & Central Asia,656676,1676,655000,NA
-TUR,Turkey,Upper middle income,Europe & Central Asia,4869817,3759817,1110000,NA
-LBY,Libya,Upper middle income,Middle East & North Africa,163141,3141,160000,NA
-CAF,Central African Republic,Low income,Sub-Saharan Africa,737305,9305,728000,NA
-SDN,Sudan,Low income,Sub-Saharan Africa,4363918,1103918,3260000,NA
-IRQ,Iraq,Upper middle income,Middle East & North Africa,1487072,280072,1207000,NA
-IRN,Iran,Lower middle income,Middle East & North Africa,811343,798343,13000,NA
-CIV,Ivory Coast,Lower middle income,Sub-Saharan Africa,306349,4349,302000,NA
-MLI,Mali,Low income,Sub-Saharan Africa,399975,49975,350000,NA
-NGA,Nigeria,Lower middle income,Sub-Saharan Africa,3412132,77132,3335000,NA
-THA,Thailand,Upper middle income,East Asia & Pacific,144510,100510,44000,NA
-HTI,Haiti,Lower middle income,Latin America & Caribbean,NA,NA,237000,NA
-DOM,Dominican Republic,Upper middle income,Latin America & Caribbean,162,162,0,116000
-TCD,Chad,Low income,Sub-Saharan Africa,971782,555782,416000,NA
-GTM,Guatemala,Upper middle income,Latin America & Caribbean,265479,479,265000,1469
-MOZ,Mozambique,Low income,Sub-Saharan Africa,877797,4797,873000,NA
-BDI,Burundi,Low income,Sub-Saharan Africa,194491,81491,113000,NA
-RWA,Rwanda,Low income,Sub-Saharan Africa,122596,121896,700,NA
-MMR,Myanmar,Lower middle income,East Asia & Pacific,NA,NA,650400,NA
-BGD,Bangladesh,Lower middle income,South Asia,1387907,918907,469000,NA
-AFG,Afghanistan,Low income,South Asia,5770949,66949,5704000,NA
-UGA,Uganda,Low income,Sub-Saharan Africa,1555603,1529903,25700,NA
-HND,Honduras,Lower middle income,Latin America & Caribbean,247174,144,247030,NA
-ECU,Ecuador,Upper middle income,Latin America & Caribbean,57323,56603,720,503882
-COL,Colombia,Upper middle income,Latin America & Caribbean,5237904,1504,5236400,1842390
-JOR,Jordan,Upper middle income,Middle East & North Africa,3047612,3047612,0,NA
-CMR,Cameroon,Lower middle income,Sub-Saharan Africa,1394269,457269,937000,NA
-NER,Niger,Low income,Sub-Saharan Africa,513945,249945,264000,NA
-BFA,Burkina Faso,Low income,Sub-Saharan Africa,1605010,25010,1580000,NA
-MEX,Mexico,Upper middle income,Latin America & Caribbean,452471,73448,379023,63179
-EGY,Egypt,Lower middle income,Middle East & North Africa,281786,280686,1100,NA
-YEM,Yemen,Low income,Middle East & North Africa,4389467,89467,4300000,NA
-MRT,Mauritania,Lower middle income,Sub-Saharan Africa,101942,101942,0,NA
-PHL,Philippines,Lower middle income,East Asia & Pacific,808801,801,808000,NA
+ISO_A3,NAME_EN,income_group,Region,value,ref_pop,idp_pop,idp_pop_2022,other_ven,original
+IDN,Indonesia,Lower middle income,East Asia & Pacific,72450,8450,64000,137000,NA,1
+MYS,Malaysia,Upper middle income,East Asia & Pacific,145672,135872,9800,680,NA,1
+PER,Peru,Upper middle income,Latin America & Caribbean,81712,6712,75000,102000,1043622,1
+ARG,Argentina,Upper middle income,Latin America & Caribbean,4118,4104,14,0,215541,1
+IND,India,Lower middle income,South Asia,955867,252867,703000,579000,NA,1
+CHN,People's Republic of China,Upper middle income,East Asia & Pacific,639296,296,639000,146000,NA,1
+PSE,Palestine,Lower middle income,Middle East & North Africa,4192144,2482144,1710000,12000,NA,1
+LBN,Lebanon,Lower middle income,Middle East & North Africa,1353108,1279108,74000,0,NA,1
+ETH,Ethiopia,Low income,Sub-Saharan Africa,4712846,979846,3733000,4569000,NA,1
+SSD,South Sudan,Low income,Sub-Saharan Africa,2065236,381236,1684000,2140000,NA,1
+SOM,Somalia,Low income,Sub-Saharan Africa,3879770,17770,3862000,3864000,NA,1
+KEN,Kenya,Lower middle income,Sub-Saharan Africa,709899,538899,171000,403000,NA,1
+PAK,Pakistan,Lower middle income,South Asia,3227231,1988231,1239000,1043000,NA,1
+TZA,Tanzania,Lower middle income,Sub-Saharan Africa,219953,188953,31000,2200,NA,1
+SYR,Syria,Low income,Middle East & North Africa,7843953,595953,7248000,6865000,NA,1
+MAR,Morocco,Lower middle income,Middle East & North Africa,154295,8295,146000,0,NA,0
+COG,Republic of the Congo,Lower middle income,Sub-Saharan Africa,65337,60637,4700,228000,NA,0
+COD,Democratic Republic of the Congo,Low income,Sub-Saharan Africa,7404392,523392,6881000,5969000,NA,1
+UKR,Ukraine,Lower middle income,Europe & Central Asia,3691512,2512,3689000,5914000,NA,1
+BRA,Brazil,Upper middle income,Latin America & Caribbean,267765,235765,32000,49600,363081,1
+RUS,Russia,Upper middle income,Europe & Central Asia,1291331,1230131,61200,7228,NA,0
+GEO,Georgia,Upper middle income,Europe & Central Asia,376019,26019,350000,339000,NA,1
+AZE,Azerbaijan,Upper middle income,Europe & Central Asia,663771,5771,658000,659000,NA,1
+TUR,Turkey,Upper middle income,Europe & Central Asia,5172127,3251127,1921000,1099052,NA,1
+ARM,Armenia,Upper middle income,Europe & Central Asia,157680,150080,7600,7600,NA,0
+LBY,Libya,Upper middle income,Middle East & North Africa,120837,1837,119000,135000,NA,1
+CAF,Central African Republic,Low income,Sub-Saharan Africa,544913,32913,512000,516000,NA,1
+SDN,Sudan,Low income,Sub-Saharan Africa,9975474,922474,9053000,3780000,NA,1
+IRQ,Iraq,Upper middle income,Middle East & North Africa,1545480,286480,1259000,1238000,NA,1
+IRN,Iran,Lower middle income,Middle East & North Africa,3764542,3764517,25,390,NA,1
+CIV,Ivory Coast,Lower middle income,Sub-Saharan Africa,NA,2370,NA,302000,NA,1
+SRB,Serbia,Upper middle income,Europe & Central Asia,223365,29365,194000,195000,NA,0
+MLI,Mali,Low income,Sub-Saharan Africa,418443,66443,352000,412000,NA,1
+NGA,Nigeria,Lower middle income,Sub-Saharan Africa,3490940,69940,3421000,4500000,NA,1
+THA,Thailand,Upper middle income,East Asia & Pacific,128333,87314,41019,41680,NA,1
+HTI,Haiti,Lower middle income,Latin America & Caribbean,NA,NA,313600,195000,NA,1
+DOM,Dominican Republic,Upper middle income,Latin America & Caribbean,1168,778,390,7900,121841,1
+TCD,Chad,Low income,Sub-Saharan Africa,1638921,1100921,538000,300000,NA,1
+GTM,Guatemala,Upper middle income,Latin America & Caribbean,242989,989,242000,249900,NA,1
+MOZ,Mozambique,Low income,Sub-Saharan Africa,712152,5152,707000,1157000,NA,1
+BDI,Burundi,Low income,Sub-Saharan Africa,159329,85229,74100,75500,NA,1
+RWA,Rwanda,Low income,Sub-Saharan Africa,139643,115643,24000,3600,NA,1
+MMR,Myanmar,Lower middle income,East Asia & Pacific,NA,NA,2860000,1501000,NA,1
+BGD,Bangladesh,Lower middle income,South Asia,1452984,971984,481000,434600,NA,1
+AFG,Afghanistan,Low income,South Asia,5723826,34826,5689000,6612000,NA,1
+UGA,Uganda,Low income,Sub-Saharan Africa,1582448,1577498,4950,37500,NA,1
+HND,Honduras,Lower middle income,Latin America & Caribbean,101182,182,101000,250900,NA,1
+ECU,Ecuador,Upper middle income,Latin America & Caribbean,67799,62899,4900,2200,469441,1
+COL,Colombia,Upper middle income,Latin America & Caribbean,5078382,1382,5077000,4807000,2851160,1
+MDA,Moldova,Upper middle income,Europe & Central Asia,NA,120947,NA,NA,NA,0
+JOR,Jordan,Upper middle income,Middle East & North Africa,NA,3063591,NA,NA,NA,1
+CMR,Cameroon,Lower middle income,Sub-Saharan Africa,1560285,485285,1075000,1010000,NA,1
+NER,Niger,Low income,Sub-Saharan Africa,648996,269996,379000,377100,NA,1
+BFA,Burkina Faso,Low income,Sub-Saharan Africa,2100735,37735,2063000,1882000,NA,1
+MEX,Mexico,Upper middle income,Latin America & Caribbean,516784,124784,392000,389600,73753,1
+EGY,Egypt,Lower middle income,Middle East & North Africa,NA,240507,NA,NA,NA,1
+YEM,Yemen,Low income,Middle East & North Africa,4571568,55568,4516000,4523000,NA,1
+MRT,Mauritania,Lower middle income,Sub-Saharan Africa,NA,112549,NA,23000,NA,1
+PHL,Philippines,Lower middle income,East Asia & Pacific,404934,934,404000,635000,NA,1

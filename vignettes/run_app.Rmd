@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 conflictRules("tidyr", mask.ok = c("extract"))
 conflictRules("dplyr", mask.ok = c("filter", "lag", "select"))
-pacman::p_load(devtools,dplyr,tidyverse,sf,here, devtools)
+pacman::p_load(devtools,dplyr,tidyverse,sf,here)
 ```
 If any update has been made in the metadata, run this chunk. 
 ```{r, echo=FALSE, eval=FALSE}
