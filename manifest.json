@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "locale": "en_GB",
+  "platform": "4.5.0",
+  "metadata": {
+    "appmode": "static",
+    "primary_rmd": null,
+    "primary_html": "inst/shiny-examples/FDPDataAtlas/www/AboutEvi.html",
+    "content_category": null,
+    "has_parameters": false
+  },
+  "packages": null,
+  "files": {
+    ".github/workflows/check-and-deploy.yml": {
+      "checksum": "800e1bd6b3068b5e27cf19eadc16e8be"
+    },
+    ".Rbuildignore": {
+      "checksum": "b448807b8fb2d44e049c8d54dc8b2074"
+    },
+    "code-of-conduct.md": {
+      "checksum": "667d32ea21e84c9480b1ab4cfc59217e"
+    },
+    "contributing.md": {
+      "checksum": "8671d17bd2c3980cecf0d345a9d75eeb"
+    },
+    "data/bounds.rda": {
+      "checksum": "cd404e129e1d89819b78ed6aa8fac289"
+    },
+    "data/datadictionary.rda": {
+      "checksum": "f4271f017da37fbde4cfc2b3309086e7"
+    },
+    "data/eviatlas_pilotdata.rda": {
+      "checksum": "a8a5af726e818c829f301d6b56f26ead"
+    },
+    "data/metadata.rda": {
+      "checksum": "38ba32ae5e2091d2d013eb35305bfc15"
+    },
+    "data/ref_data.rda": {
+      "checksum": "e6a1d15d1a90b27d32932bfa74044499"
+    },
+    "DESCRIPTION": {
+      "checksum": "307ae3635ccc28855f6f2e587804e7b8"
+    },
+    "inst/extdata/datadictionary.csv": {
+      "checksum": "379d45bb3ea59e85f424d49af41b2acd"
+    },
+    "inst/extdata/metadata_2022_01_16.csv": {
+      "checksum": "d989b14586ea86fbbac1d09fa9d0aced"
+    },
+    "inst/extdata/metadata_quality_check_2022-10-21.csv": {
+      "checksum": "37d15d542a38b68ee950f966fbf3b50c"
+    },
+    "inst/extdata/metadata_quality_check_2022-10-21.xlsx": {
+      "checksum": "9433cf38aa70f4a4b42c67a4b514c952"
+    },
+    "inst/extdata/metadata_v2.csv": {
+      "checksum": "668b494854c44a9a4cd2265f8d0eb6c8"
+    },
+    "inst/extdata/metadata.csv": {
+      "checksum": "85a73aa6de478d77439a7247f8057e08"
+    },
+    "inst/extdata/pilotdata.csv": {
+      "checksum": "f9b554524ae3459277463b37b507d017"
+    },
+    "inst/extdata/pilotdata.rdata": {
+      "checksum": "2a93cef82a13826b3ea6b16a7b4b5dba"
+    },
+    "inst/extdata/tutorial/figures/Figure1.png": {
+      "checksum": "80f9df412a3d1a9a74d11f180a9762e8"
+    },
+    "inst/extdata/tutorial/figures/Figure2.PNG": {
+      "checksum": "45fa6d1bd40cd9663416195b808d0e32"
+    },
+    "inst/extdata/tutorial/figures/Figure3a.PNG": {
+      "checksum": "64a39245503f27a0dfc48019058e2169"
+    },
+    "inst/extdata/tutorial/figures/Figure3b.PNG": {
+      "checksum": "e33f2de15759e1e80b277d23bd4e0603"
+    },
+    "inst/extdata/tutorial/figures/Figure3c.PNG": {
+      "checksum": "afc3116d54d750bf71bb05cfa17350f5"
+    },
+    "inst/extdata/tutorial/figures/Figure4.PNG": {
+      "checksum": "db5137f360dec109a7bc1b056f19bfa8"
+    },
+    "inst/extdata/tutorial/figures/Figure5a.PNG": {
+      "checksum": "1b0d758432c3a88b9e8a1e208f98f762"
+    },
+    "inst/extdata/tutorial/figures/Figure5b.PNG": {
+      "checksum": "595f633978d7cf7644ee238dec457997"
+    },
+    "inst/extdata/UNHCR_bounds.rds": {
+      "checksum": "65866e1378389be83be667f8a1662ceb"
+    },
+    "inst/extdata/WB_bounds_stats.rds": {
+      "checksum": "d6db055e82ec8ff9e3384605f957f456"
+    },
+    "inst/extdata/wb_bounds.csv": {
+      "checksum": "0bbc2a2ce7e16badf232cb6660dcb560"
+    },
+    "inst/extdata/wb_bounds.dbf": {
+      "checksum": "b54661a6db397b0e292e2321137cb650"
+    },
+    "inst/extdata/wb_bounds.prj": {
+      "checksum": "c742bee3d4edfc2948a2ad08de1790a5"
+    },
+    "inst/extdata/wb_bounds.rar": {
+      "checksum": "a8d3cac431eae04ad9a36bdb1447a763"
+    },
+    "inst/extdata/WB_bounds.rds": {
+      "checksum": "ba6b11617a86bb0afe5e5a9a3f849662"
+    },
+    "inst/extdata/wb_bounds.shp": {
+      "checksum": "901f6e1f4fa73c171f31a1f4ec256979"
+    },
+    "inst/extdata/wb_bounds.shx": {
+      "checksum": "c11d211b30d05eccc6146d5c816d8362"
+    },
+    "inst/shiny-examples/FDPDataAtlas/gendescplot.R": {
+      "checksum": "2fb0ccda4e2b3f23c5aa85866ec27d14"
+    },
+    "inst/shiny-examples/FDPDataAtlas/genheatmap.R": {
+      "checksum": "5baad2f0e8382fbca86f91f36b5217d2"
+    },
+    "inst/shiny-examples/FDPDataAtlas/server.R": {
+      "checksum": "28e6c3d3941c2920a009d5485e59ffda"
+    },
+    "inst/shiny-examples/FDPDataAtlas/ui.R": {
+      "checksum": "adb7107c9c02e4b49c0016d73daa1754"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/AboutEvi.html": {
+      "checksum": "8e4693d45bff5c9f0040ea004378570f"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/AboutSysMap.html": {
+      "checksum": "c2fa807dee9c1c2a15f8ae92fe668ede"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/google-analytics.html": {
+      "checksum": "8f5b42179ebd0c8f8ffbe3468f794252"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/HowCiteEvi.html": {
+      "checksum": "472bebf9fbb790b68de496e03d082711"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/HowEviWorks.html": {
+      "checksum": "9f164ff9ee107ae5f46f54c2e0ec4400"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/logos.png": {
+      "checksum": "4f94183478efb9784cbbfd2e0609c641"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/pilotdata.csv": {
+      "checksum": "f9b554524ae3459277463b37b507d017"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/pilotdata.rdata": {
+      "checksum": "2a93cef82a13826b3ea6b16a7b4b5dba"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure1.png": {
+      "checksum": "80f9df412a3d1a9a74d11f180a9762e8"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure2.PNG": {
+      "checksum": "45fa6d1bd40cd9663416195b808d0e32"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure3a.PNG": {
+      "checksum": "64a39245503f27a0dfc48019058e2169"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure3b.PNG": {
+      "checksum": "e33f2de15759e1e80b277d23bd4e0603"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure3c.PNG": {
+      "checksum": "afc3116d54d750bf71bb05cfa17350f5"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure4.PNG": {
+      "checksum": "db5137f360dec109a7bc1b056f19bfa8"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure5a.PNG": {
+      "checksum": "1b0d758432c3a88b9e8a1e208f98f762"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/tutorial/figures/Figure5b.PNG": {
+      "checksum": "595f633978d7cf7644ee238dec457997"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/unhcr-logo.png": {
+      "checksum": "9eeda7e6a8a7cdd7da4562230a7351e0"
+    },
+    "inst/shiny-examples/FDPDataAtlas/www/wb-logo.png": {
+      "checksum": "b71378993680c7ab122f6f0cb89790c3"
+    },
+    "LICENSE": {
+      "checksum": "1ebbd3e34237af26da5dc08a4e440464"
+    },
+    "LICENSE.md": {
+      "checksum": "29a9012941a6bcb26bf0fb4382c5dd75"
+    },
+    "man/GenLocationTrend.Rd": {
+      "checksum": "f43c3543ab819a726558bd1e8e7dd63e"
+    },
+    "man/GenTimeTrend.numeric.Rd": {
+      "checksum": "6d0abaaacc1fde232d3bdb3f0c7f1280"
+    },
+    "man/GenTimeTrend.Rd": {
+      "checksum": "52452fe5cb27ab1e3f669d37416c8088"
+    },
+    "man/get_latitude_cols.Rd": {
+      "checksum": "9b2d5c055cf8e62731ef1dc558ce91e9"
+    },
+    "man/get_link_cols.Rd": {
+      "checksum": "e9dfff2160131e6909967084245e7e17"
+    },
+    "man/get_longitude_cols.Rd": {
+      "checksum": "4aadd321dc055ba39ee6345d2f07b441"
+    },
+    "man/is_link_col.Rd": {
+      "checksum": "fe0b13a76df4ce5351f38fb2931ef23a"
+    },
+    "man/runShiny.Rd": {
+      "checksum": "50d7a928c4aa6c0cd31a076b904edd56"
+    },
+    "man/sys_map_shapefile.Rd": {
+      "checksum": "000ef87192c836c3f99e675445290730"
+    },
+    "NAMESPACE": {
+      "checksum": "75d642121d23540ddd2e12dad9c33e56"
+    },
+    "R/GenLocationTrend.R": {
+      "checksum": "47711bb2c2b2ac8574ff46c4f0f3a1de"
+    },
+    "R/GenTimeTrend.R": {
+      "checksum": "58e8985c5cabae3db5068474614a8e6c"
+    },
+    "R/get_coord_cols.R": {
+      "checksum": "86454b0e20f97b05736ba74bc6d43d5c"
+    },
+    "R/get_link_cols.R": {
+      "checksum": "fb50be5da7fdc01bc0db4fb8138bfd4a"
+    },
+    "R/global.R": {
+      "checksum": "907931a6dd9b2e905207a9de13aa56ab"
+    },
+    "R/runShiny.R": {
+      "checksum": "745af25c084c76cdaa3d50c4e76d68ef"
+    },
+    "R/sys_map_shapefile.R": {
+      "checksum": "6fce5eae22935bfb43ced16d0c10928f"
+    },
+    "README.md": {
+      "checksum": "59941e1d66f46b3aa8a117fd313cbb33"
+    },
+    "vignettes/run_app.Rmd": {
+      "checksum": "4a8ad8d230232825206a8e67406134f8"
+    }
+  },
+  "users": null
+}
